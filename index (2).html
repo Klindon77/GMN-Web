@@ -1,0 +1,1824 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global Markets Nexus — Global Finance. Clear Perspectives.</title>
+<meta name="description" content="Global Markets Nexus (GMN): financial news, global market analysis, and investing education covering India, US, forex, crypto, commodities, and personal finance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Work+Sans:wght@400;500;600;700&family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   DESIGN TOKENS (values taken from the GMN Figma file)
+   ========================================================= */
+:root{
+  --navy:#0a2342;          /* header, footer, newsletter */
+  --ink:#000d22;           /* deepest navy: headings, chips */
+  --orange:#dc6900;        /* accent used throughout the Figma design */
+  --text:#121c26;
+  --muted:#44474e;
+  --muted-2:#74777e;
+  --blue:#445c9a;          /* category labels, links */
+  --tint:#edf4ff;          /* light card surface */
+  --chip:#dfe9f7;
+  --img-bg:#e4effd;
+  --page:#f7f9ff;
+  --white:#fff;
+  --on-dark:#d9e3f1;
+  --dot:#c4c6cf;
+  --line:rgba(196,198,207,.6);
+  --line-soft:rgba(196,198,207,.4);
+  --line-faint:rgba(196,198,207,.3);
+  --up:#00875a;
+  --down:#ba1a1a;
+
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"Work Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --mono:"Cousine","Liberation Mono","Courier New",monospace;
+
+  --max:1280px;
+  --gutter:24px;
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--page);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.5;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:2px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3,h4,p,ul,ol{margin:0}
+ul,ol{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:8px;top:-60px;background:var(--orange);color:#fff;padding:8px 14px;font-weight:700;z-index:100}
+.skip-link:focus{top:8px}
+
+.container{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.mono{font-family:var(--mono)}
+.up{color:var(--up)}
+.down{color:var(--down)}
+.svg-ic{display:inline-block;flex-shrink:0;vertical-align:middle}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.site-header{background:var(--navy);color:#fff;border-bottom:1px solid var(--navy)}
+
+/* Utility bar */
+.utility{background:var(--ink);border-bottom:1px solid var(--navy)}
+.utility .container{display:flex;align-items:center;justify-content:space-between;min-height:32px;gap:16px}
+.utility__group{display:flex;align-items:center;gap:16px}
+.utility__text{font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px;color:var(--on-dark)}
+.utility__date{letter-spacing:.5px;text-transform:uppercase}
+.utility__edition{display:flex;align-items:center;gap:4px}
+.utility__edition strong{color:#fff}
+.vdiv{width:1px;height:12px;background:rgba(196,198,207,.4)}
+.utility a{display:inline-flex;align-items:center;gap:4px}
+
+/* Brand row */
+.brandbar{border-bottom:1px solid var(--navy)}
+.brandbar .container{display:flex;align-items:center;justify-content:space-between;min-height:80px;gap:24px}
+.brand{display:flex;align-items:center;gap:16px;min-width:0}
+.brand:hover{text-decoration:none}
+.brand__logo{width:128px;height:32px;flex-shrink:0;position:relative}
+.brand__logo img{width:100%;height:100%;object-fit:contain}
+svg.brand__logo{display:block}
+.brand__logo.is-missing{background:var(--ink);border:1px solid rgba(196,198,207,.3);display:flex;align-items:center;justify-content:center}
+.brand__logo.is-missing::after{content:"GMN";font-family:var(--serif);font-weight:700;font-size:15px;letter-spacing:1px;color:#fff}
+.brand__text{display:flex;flex-direction:column;min-width:0}
+.brand__name{font-family:var(--serif);font-weight:600;font-size:24px;line-height:30px;letter-spacing:-.6px;text-transform:uppercase;color:#fff;white-space:nowrap}
+.brand__tag{font-size:10px;line-height:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--on-dark);white-space:nowrap}
+
+.quicklinks{display:flex;align-items:center;gap:16px;font-size:12px;line-height:16px;font-weight:600;letter-spacing:.72px;color:var(--on-dark)}
+.quicklinks .sep{color:rgba(196,198,207,.4)}
+
+.actions{display:flex;align-items:center;gap:16px}
+.icon-btn{background:none;border:0;padding:6px;display:inline-flex;align-items:center;justify-content:center;color:#fff}
+.signin{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.72px;padding:0 4px;color:#fff}
+.btn-orange{background:var(--orange);color:#fff;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:12px;line-height:16px;font-weight:600;letter-spacing:.72px;border:0}
+.btn-orange:hover{text-decoration:none;background:#c45d00}
+.avatar{width:32px;height:32px;border-radius:9999px;background:var(--ink);border:1px solid rgba(196,198,207,.3);display:inline-flex;align-items:center;justify-content:center;color:#fff}
+.menu-toggle{display:none;background:none;border:1px solid rgba(196,198,207,.3);color:#fff;width:40px;height:40px;align-items:center;justify-content:center}
+
+/* Primary nav */
+.primary-nav{background:var(--ink);border-bottom:1px solid var(--navy)}
+.primary-nav ul{display:flex;align-items:center;overflow-x:auto;scrollbar-width:none}
+.primary-nav ul::-webkit-scrollbar{display:none}
+.primary-nav li{flex-shrink:0;position:relative}
+.primary-nav a,.primary-nav .more-btn{display:flex;align-items:center;gap:2px;padding:10px 12px;font-size:12px;line-height:16px;font-weight:600;letter-spacing:.72px;color:var(--on-dark);background:none;border:0;white-space:nowrap}
+.primary-nav a:hover,.primary-nav .more-btn:hover{color:#fff;text-decoration:none}
+.primary-nav a[aria-current="page"]{background:var(--navy);color:#fff;font-size:16px;line-height:24px;font-weight:400;letter-spacing:0;padding:10px 12px 12px;border-bottom:2px solid var(--orange)}
+.more-menu{position:absolute;right:0;top:100%;min-width:200px;background:var(--ink);border:1px solid rgba(196,198,207,.3);z-index:30;display:none}
+.more-menu.is-open{display:block}
+.more-menu a{padding:10px 14px}
+
+/* Breaking bar */
+.breaking{background:#fff;border-bottom:1px solid var(--line)}
+.breaking .container{display:flex;align-items:center;gap:16px;padding-top:8px;padding-bottom:8px}
+.badge-breaking{background:var(--orange);color:#fff;display:inline-flex;align-items:center;gap:6px;padding:2px 8px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+.badge-breaking::before{content:"";width:6px;height:6px;border-radius:9999px;background:#fff}
+.breaking__text{flex:1;min-width:0;font-size:13px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.breaking__text strong{font-weight:500;color:var(--text)}
+.breaking__text .dot{color:var(--dot);margin:0 6px}
+.breaking__text span.sub{color:var(--muted)}
+.breaking__time{display:flex;align-items:center;gap:4px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px;color:var(--muted-2);flex-shrink:0}
+
+/* Ticker strip */
+.ticker{background:var(--tint);border-bottom:1px solid rgba(196,198,207,.5)}
+.ticker__scroll{overflow-x:auto;scrollbar-width:thin}
+.ticker__list{display:flex;align-items:center;gap:48px;padding:6px var(--gutter);max-width:none;width:max-content;margin:0 auto}
+.tick{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;letter-spacing:-.12px;white-space:nowrap}
+.tick__sym{font-weight:600;color:var(--text)}
+.tick__px{font-weight:500;color:var(--muted)}
+.tick__chg{font-weight:500;display:inline-flex;align-items:center;gap:2px}
+.sample-tag{font-family:var(--mono);font-size:10px;line-height:15px;color:var(--muted);border:1px solid var(--line);background:#fff;padding:0 6px;white-space:nowrap}
+
+/* =========================================================
+   SHARED SECTION PATTERNS
+   ========================================================= */
+main{padding-bottom:24px}
+.section{padding-top:48px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.sec-head--end{align-items:flex-end}
+.sec-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px}
+.sec-title::before{content:"";width:6px;height:24px;background:var(--bar,var(--orange));flex-shrink:0}
+.sec-title h2{font-family:var(--serif);font-weight:700;font-size:24px;line-height:32px;letter-spacing:-.6px;color:var(--ink)}
+.desk{background:var(--chip);padding:2px 8px;font-size:12px;line-height:16px;font-weight:600;text-transform:uppercase;color:var(--deskc,var(--ink))}
+.sec-sub{font-size:13px;line-height:20px;color:var(--muted);margin-top:4px}
+.sec-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.72px;color:var(--blue)}
+.sec-meta{font-size:11px;line-height:16.5px;color:var(--muted)}
+.sec-meta--caps{font-family:var(--sans);font-size:12px;line-height:16px;font-weight:600;text-transform:uppercase}
+
+.kicker{font-size:10px;line-height:15px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.k-orange{color:var(--orange)} .k-blue{color:var(--blue)} .k-ink{color:var(--ink)}
+.h-card{font-family:var(--serif);font-weight:600;font-size:18px;line-height:24.75px;color:var(--text)}
+.h-card--ink{color:var(--ink)}
+.dek{font-size:13px;line-height:20px;color:var(--muted)}
+.dek--loose{line-height:21.13px}
+.meta-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid var(--line-soft);padding-top:13px;margin-top:16px;font-size:11px;line-height:16.5px;color:var(--muted)}
+
+.card{border:1px solid var(--line);padding:17px;display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.card--white{background:#fff}
+.card--tint{background:var(--tint)}
+.card__body{display:flex;flex-direction:column;gap:8px}
+
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.split-7-5{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:start}
+.split-7-5>:first-child{grid-column:1/span 7}
+.split-7-5>:last-child{grid-column:8/span 5}
+
+/* Media with graceful fallback if an image file is missing */
+.media{position:relative;background:var(--img-bg);overflow:hidden}
+.media img{width:100%;height:100%;object-fit:cover}
+.media__art{display:block;width:100%;height:100%}
+.media.is-missing{background:linear-gradient(135deg,var(--navy) 0%,#1d3b66 60%,#2c4d7a 100%)}
+.media.is-missing::after{content:attr(data-label);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;color:rgba(217,227,241,.85);font-size:12px;letter-spacing:.5px}
+
+/* =========================================================
+   1. LEADERBOARD AD
+   ========================================================= */
+.ad-top{padding-top:24px;display:flex;flex-direction:column;align-items:center}
+.ad-label{font-size:10px;line-height:15px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding-bottom:4px}
+.leaderboard{width:100%;max-width:728px;min-height:90px;background:var(--tint);border:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 25px}
+.leaderboard__info{display:flex;align-items:center;gap:16px;min-width:0}
+.leaderboard__icon{width:38px;height:40px;background:var(--navy);border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.leaderboard__title{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.72px;color:var(--ink)}
+.leaderboard__copy{font-size:13px;line-height:20px;color:var(--muted)}
+.leaderboard .btn-orange{text-transform:uppercase;letter-spacing:.6px;flex-shrink:0}
+
+/* =========================================================
+   2. HERO (3 columns)
+   ========================================================= */
+.hero{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;padding-top:32px;padding-bottom:25px;border-bottom:1px solid var(--line)}
+.hero__left{grid-column:1/span 3;border-right:1px solid var(--line);padding-right:21px}
+.hero__center{grid-column:4/span 6;padding:0 8px;display:flex;flex-direction:column}
+.hero__right{grid-column:10/span 3;border-left:1px solid var(--line);padding-left:21px}
+
+.rail-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px}
+.rail-head h2{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink)}
+.rail-head h2::before{content:"";width:8px;height:8px;border-radius:9999px;background:var(--orange)}
+.brief{border-top:1px solid var(--line);padding:15px 0 14px;display:flex;flex-direction:column;gap:3px}
+.brief__meta{display:flex;align-items:center;gap:8px;font-size:10px;line-height:15px}
+.brief__meta .kicker{letter-spacing:0;color:var(--blue)}
+.brief__meta .dot{color:var(--dot)}
+.brief__meta time{font-size:11px;line-height:16.5px;color:var(--muted)}
+.brief h3{font-family:var(--serif);font-weight:600;font-size:18px;line-height:24.75px;color:var(--text)}
+.brief p{font-size:13px;line-height:20px;color:var(--muted)}
+.memo-wrap{border-top:1px solid var(--line);margin-top:8px;padding-top:17px}
+.memo{background:var(--tint);border-left:4px solid var(--ink);padding:14px 14px 14px 18px;display:flex;flex-direction:column;gap:3px}
+.memo__head{display:flex;justify-content:space-between;align-items:center;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--ink)}
+.memo blockquote{margin:0;font-size:13px;line-height:17.88px;color:var(--text)}
+.memo cite{font-style:normal;font-size:11px;line-height:16.5px;font-weight:600;color:var(--muted);padding-top:4px}
+
+.cat-badge{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;padding-bottom:8px}
+.cat-badge__main{background:var(--navy);color:var(--orange);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px}
+.cat-badge__sub{font-size:11px;line-height:16.5px;font-weight:500;color:var(--muted)}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:36px;line-height:45px;letter-spacing:-.54px;color:var(--ink);padding-bottom:12px}
+.hero-figure{margin:0 0 12px;border:1px solid var(--line);padding:1px;background:var(--img-bg);position:relative}
+.hero-figure .media{aspect-ratio:586/328.75}
+.hero-figure figcaption{position:absolute;left:1px;right:1px;bottom:1px;background:rgba(0,13,34,.8);backdrop-filter:blur(2px);color:#fff;display:flex;justify-content:space-between;gap:12px;padding:6px 12px;font-size:11px;line-height:16.5px}
+.hero__lede{font-size:18px;line-height:29.25px;color:var(--text);padding-bottom:16px}
+.takeaways{background:var(--tint);border:1px solid var(--line);padding:17px;display:flex;flex-direction:column;gap:8px}
+.takeaways__head{display:flex;align-items:center;gap:6px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.25px;text-transform:uppercase;color:var(--ink)}
+.takeaways ul{display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:20px;color:var(--text)}
+.takeaways li{padding-left:18px;position:relative}
+.takeaways li strong{font-weight:700}
+.hero__byline{margin-top:auto;padding-top:80px}
+.byline-box{border-top:1px solid var(--line);padding-top:13px;display:flex;flex-direction:column;gap:12px}
+.byline-box p{font-size:12px;line-height:18px;color:var(--muted)}
+.byline-box p strong{font-weight:600;color:var(--text)}
+.byline-actions{display:flex;align-items:center;gap:8px}
+.byline-actions .btn-orange{font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+.square-btn{width:32px;height:36px;border:1px solid var(--dot);background:transparent;display:inline-flex;align-items:center;justify-content:center;color:var(--ink)}
+
+.watch{background:var(--tint);border:1px solid var(--line);padding:15px;display:flex;flex-direction:column;gap:8px}
+.watch__head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:9px}
+.watch__head h2{display:flex;align-items:center;gap:6px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.72px;text-transform:uppercase;color:var(--ink)}
+.watch__tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.watch__tab{border:1px solid var(--line);background:#fff;color:var(--muted);font-size:11px;line-height:16.5px;font-weight:500;padding:5px 2px;text-align:center}
+.watch__tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
+.watch__table{display:flex;flex-direction:column;gap:8px;padding-top:4px}
+.watch__row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:4px 0 5px;border-bottom:1px solid var(--line-faint);font-size:12px;line-height:16px;letter-spacing:-.12px}
+.watch__row:last-child{border-bottom:0}
+.watch__row b{font-weight:700;color:var(--text)}
+.watch__row span{display:flex;gap:8px;font-weight:500;color:var(--text)}
+.watch__row span em{font-style:normal;font-weight:600;min-width:44px;text-align:right}
+
+.mostread{padding-top:20px}
+.mostread__head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
+.mostread__head h2{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--ink)}
+.mostread ol{display:flex;flex-direction:column;gap:12px}
+.mostread li{display:flex;gap:12px}
+.mostread li+li{border-top:1px solid var(--line-soft);padding-top:9px}
+.mostread__n{font-family:var(--serif);font-weight:700;font-size:24px;line-height:24px;letter-spacing:-.24px;color:var(--orange);width:12px;flex-shrink:0}
+.mostread h3{font-size:15px;line-height:18.75px;font-weight:600;color:var(--text)}
+.mostread p{font-size:11px;line-height:16.5px;color:var(--muted);padding-top:1px}
+
+.mrec{margin-top:20px;background:var(--tint);border:1px solid var(--line);min-height:250px;padding:17px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.mrec__label{font-size:10px;line-height:15px;text-transform:uppercase;color:var(--muted)}
+.mrec__body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0;gap:4px}
+.mrec__body svg{margin-bottom:8px;color:var(--blue)}
+.mrec__body h3{font-family:var(--serif);font-weight:700;font-size:18px;line-height:26px;color:var(--ink)}
+.mrec__body p{font-size:13px;line-height:20px;color:var(--muted);max-width:220px}
+.mrec a{display:block;width:100%;background:var(--ink);color:#fff;padding:6px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+
+/* =========================================================
+   3. INDIA MARKETS
+   ========================================================= */
+.pulse{margin-top:16px;background:var(--tint);border:1px solid var(--line);padding:13px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.pulse__item dt{font-size:11px;line-height:16px;font-weight:500;letter-spacing:-.12px;color:var(--muted)}
+.pulse__item dd{margin:0;display:flex;align-items:baseline;gap:6px;font-size:14px;line-height:16px;font-weight:700;letter-spacing:-.12px;color:var(--text)}
+.pulse__item dd span{font-size:11px;font-weight:600}
+.india-grid{margin-top:20px}
+.india-main{border-right:1px solid var(--line);padding-right:24px}
+.india-main .media-frame{border:1px solid var(--line);padding:1px;background:var(--img-bg);position:relative;margin-bottom:12px}
+.india-main .media{aspect-ratio:681.66/382.55}
+.flag{position:absolute;left:13px;top:13px;background:var(--ink);color:#fff;font-size:11px;line-height:16.5px;font-weight:700;letter-spacing:.55px;text-transform:uppercase;padding:4px 10px;z-index:1}
+.india-main h3{font-family:var(--serif);font-weight:700;font-size:36px;line-height:45px;letter-spacing:-.54px;color:var(--ink);padding-bottom:8px}
+.india-main .dek{font-size:15px;line-height:24.38px;padding-bottom:10px}
+.bylinerow{display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;font-size:12px;line-height:18px;color:var(--muted)}
+.bylinerow strong{font-weight:700;color:var(--text)}
+.bylinerow .read{font-weight:600;color:var(--orange)}
+.india-cards{display:flex;flex-direction:column;gap:20px}
+.india-cards .card{gap:3px;padding:15px;justify-content:flex-start}
+.india-cards time{font-size:11px;line-height:16.5px;color:var(--muted);padding-top:4px}
+
+/* =========================================================
+   5. FOREX
+   ========================================================= */
+.fx-strip{margin-top:16px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.fx{background:var(--tint);border:1px solid var(--line);padding:12px 13px 13px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.fx__pair{font-size:11px;line-height:16.5px;font-weight:700;color:var(--muted)}
+.fx__px{font-family:var(--serif);font-weight:700;font-size:16px;line-height:24px;color:var(--text)}
+.fx__chg{font-family:var(--mono);font-weight:700;font-size:11px;line-height:16.5px}
+.analysis{background:#fff;border:1px solid var(--line);padding:21px;display:flex;flex-direction:column;justify-content:space-between;gap:40px;min-height:100%}
+.analysis h3{font-family:var(--serif);font-weight:600;font-size:24px;line-height:30px;letter-spacing:-.24px;color:var(--ink)}
+.analysis .body{font-size:15px;line-height:24.38px;color:var(--muted);padding-top:4px}
+.analysis .meta-row{font-size:12px;line-height:18px;margin-top:0}
+.widget{background:var(--tint);border:1px solid var(--line);padding:17px;display:flex;flex-direction:column;gap:12px}
+.widget__head{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding-bottom:9px}
+.widget__head h3{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.72px;text-transform:uppercase;color:var(--ink)}
+.cal{display:flex;flex-direction:column;gap:10px}
+.cal li{background:#fff;border:1px solid var(--line-soft);padding:11px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cal b{display:block;font-size:13px;line-height:20px;font-weight:600;color:var(--text)}
+.cal small{display:block;font-size:11px;line-height:20px;color:var(--muted)}
+.impact{color:#fff;font-size:10px;line-height:20px;font-weight:700;letter-spacing:.25px;text-transform:uppercase;padding:2px 8px;flex-shrink:0}
+.impact--high{background:var(--down)}
+.impact--med{background:var(--orange)}
+
+/* =========================================================
+   6. CRYPTO
+   ========================================================= */
+.crypto-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-weight:700;font-size:12px;line-height:16px}
+
+/* =========================================================
+   7. INVESTING
+   ========================================================= */
+.num-badge{width:28px;height:28px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:12px}
+.guide-foot{border-top:1px solid var(--line-soft);padding-top:13px;margin-top:16px;font-size:11px;line-height:16.5px;font-weight:700;text-transform:uppercase;color:var(--blue)}
+.notice{margin-top:16px;background:var(--tint);border:1px solid var(--line);padding:13px;text-align:center;font-size:13px;line-height:19.5px;text-transform:uppercase;color:var(--muted)}
+.notice strong{font-weight:600;color:var(--text)}
+
+/* =========================================================
+   8. ECONOMY & COMMODITIES
+   ========================================================= */
+.cmdty{display:flex;flex-direction:column;gap:8px}
+.cmdty li{background:#fff;border:1px solid var(--line-faint);padding:9px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;line-height:16px;letter-spacing:-.12px}
+.cmdty b{font-weight:700;color:var(--text)}
+.cmdty span{display:flex;gap:8px;font-weight:700;color:var(--text)}
+.cmdty em{font-style:normal;font-weight:600;min-width:44px;text-align:right}
+
+/* =========================================================
+   9. EDUCATION
+   ========================================================= */
+.pillars{gap:24px}
+.pillars .card{padding:21px}
+.pillar-kicker{display:flex;align-items:center;gap:8px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--orange)}
+.pillar-link{display:inline-flex;align-items:center;gap:4px;border-top:1px solid var(--line-soft);padding-top:13px;margin-top:16px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px;color:var(--blue);width:100%}
+
+/* =========================================================
+   10. LATEST NEWS
+   ========================================================= */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--dot);background:#fff;color:var(--muted);font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px;padding:5px 13px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.stream{margin-top:20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.news-item{display:flex;gap:16px;padding:16px 8px;align-items:flex-start}
+.news-item+.news-item{border-top:1px solid var(--line)}
+.news-item[hidden]{display:none}
+.news-item__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.news-item__meta{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;font-size:12px;line-height:18px;color:var(--muted)}
+.news-item__meta .dot{color:var(--dot);font-size:10px}
+.tag{color:#fff;font-size:10px;line-height:15px;font-weight:700;text-transform:uppercase;padding:2px 8px}
+.tag--ink{background:var(--ink)} .tag--blue{background:var(--blue)} .tag--orange{background:var(--orange)}
+.news-item h3{font-family:var(--serif);font-weight:600;font-size:18px;line-height:26px;color:var(--text);padding-top:2px}
+.news-thumb{width:144px;height:80px;flex-shrink:0;border:1px solid var(--line-soft);padding:1px;background:var(--img-bg)}
+.news-thumb .media{width:100%;height:100%}
+.stream-empty{padding:24px 8px;text-align:center;color:var(--muted);font-size:13px}
+.load-more{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px 0 16px}
+.btn-outline{border:2px solid var(--orange);background:transparent;color:var(--orange);display:inline-flex;align-items:center;gap:8px;padding:12px 26px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+.btn-outline:hover{background:rgba(220,105,0,.06)}
+.load-note{font-size:12px;color:var(--muted);min-height:18px}
+
+/* =========================================================
+   11. NEWSLETTER
+   ========================================================= */
+.newsletter{margin-top:48px;background:var(--navy);border:1px solid var(--ink);padding:49px 24px}
+.newsletter__inner{max-width:896px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:32px;align-items:center}
+.newsletter__eyebrow{display:flex;align-items:center;gap:8px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--orange)}
+.newsletter h2{font-family:var(--serif);font-weight:700;font-size:36px;line-height:45px;letter-spacing:-.54px;color:#fff;margin-top:8px}
+.newsletter__copy{font-size:15px;line-height:24.38px;color:var(--on-dark);max-width:576px;margin-top:8px}
+.newsletter__fine{font-size:12px;line-height:16px;color:var(--dot);margin-top:8px}
+.newsletter__fine a{text-decoration:underline}
+
+.nl-form{display:grid;grid-template-columns:1fr;gap:8px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;line-height:16px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--on-dark)}
+.field input{width:100%;min-height:46px;background:#fff;border:1px solid var(--dot);border-radius:0;padding:12px 17px;font-family:var(--sans);font-size:15px;color:var(--text)}
+.field input::placeholder{color:var(--muted)}
+.field input:focus{outline:2px solid var(--orange);outline-offset:0;border-color:var(--orange)}
+.field input[aria-invalid="true"]{border-color:#ff8a80;outline:2px solid #ff8a80;outline-offset:0}
+.field__error{font-size:12px;line-height:16px;color:#ffb4ab;min-height:0}
+.field__error:empty{display:none}
+.nl-submit{min-height:46px;background:var(--orange);color:#fff;border:0;padding:15px 24px;font-size:12px;line-height:16px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.nl-submit:hover{background:#c45d00}
+.nl-submit[disabled]{opacity:.7;cursor:progress}
+.spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;display:none}
+.nl-submit.is-loading .spinner{display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spinner{animation-duration:2s}}
+.nl-status{font-size:13px;line-height:20px;padding:10px 12px;border-left:4px solid transparent}
+.nl-status:empty{display:none}
+.nl-status.is-success{background:rgba(0,135,90,.15);border-left-color:#3ddc97;color:#e6fff4}
+.nl-status.is-error{background:rgba(186,26,26,.18);border-left-color:#ff8a80;color:#ffe9e6}
+.nl-status.is-info{background:rgba(217,227,241,.1);border-left-color:var(--on-dark);color:var(--on-dark)}
+.nl-privacy{font-size:11px;line-height:16px;color:var(--dot)}
+
+/* =========================================================
+   12. EDITORIAL PLEDGE
+   ========================================================= */
+.pledge{gap:24px}
+.pledge .card{justify-content:flex-start}
+.pledge__icon{width:36px;height:36px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.pledge h3{font-family:var(--serif);font-weight:700;font-size:18px;line-height:26px;color:var(--ink);padding-bottom:8px}
+
+/* =========================================================
+   13. FAQ
+   ========================================================= */
+.faq{margin-top:24px;border-top:1px solid var(--line)}
+.faq__item{border-bottom:1px solid var(--line)}
+.faq__q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;text-align:left;padding:15px 0 14px;font-family:var(--serif);font-weight:600;font-size:18px;line-height:26px;color:var(--ink)}
+.faq__q svg{transition:transform .2s ease;flex-shrink:0}
+.faq__q[aria-expanded="true"] svg{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.faq__q svg{transition:none}}
+.faq__a{padding:0 0 16px;font-size:15px;line-height:24px;color:var(--muted);max-width:860px}
+.faq__a[hidden]{display:none}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.site-footer{background:var(--navy);border-top:1px solid var(--ink);color:var(--on-dark);margin-top:24px}
+.site-footer .container{padding-top:40px;padding-bottom:24px}
+.footer-top{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:40px;border-bottom:1px solid rgba(213,227,255,.2);padding-bottom:41px}
+.footer-brand{grid-column:1/span 2;padding-right:24px;display:flex;flex-direction:column;gap:16px}
+.footer-brand .brand{gap:8px}
+.footer-brand .brand__name{font-size:18px;line-height:26px;letter-spacing:-.45px}
+.footer-brand p{font-size:15px;line-height:24.38px;max-width:448px}
+.terminals{display:flex;align-items:center;flex-wrap:wrap;gap:16px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.terminals span.pill{background:var(--ink);color:#fff;padding:4px 8px;letter-spacing:.8px}
+.footer-col h4{font-size:12px;line-height:16px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--orange);margin-bottom:16px}
+.footer-col ul{display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:20px}
+.footer-disclosure{border-bottom:1px solid rgba(213,227,255,.2);padding:15px 0 17px;font-size:12px;line-height:19.5px}
+.footer-disclosure strong{color:#fff;font-weight:600}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px 24px;padding-top:16px;font-size:10px;line-height:14px;font-weight:700;letter-spacing:.8px}
+.footer-bottom nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.footer-bottom .sep{color:rgba(196,198,207,.4)}
+
+/* =========================================================
+   RESPONSIVE — LAPTOP / SMALL DESKTOP (≤ 1199px)
+   ========================================================= */
+@media (max-width:1199px){
+  .quicklinks{display:none}
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET (≤ 1023px)
+   Hero becomes: featured story full width, then the two rails side by side.
+   ========================================================= */
+@media (max-width:1023px){
+  .signin{display:none}
+  .hero{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  .hero__center{grid-column:1/-1;order:-1;padding:0}
+  .hero__left{grid-column:1;border-right:1px solid var(--line)}
+  .hero__right{grid-column:2;border-left:0;padding-left:0}
+  .hero__byline{padding-top:24px}
+
+  .split-7-5{grid-template-columns:1fr}
+  .split-7-5>:first-child,.split-7-5>:last-child{grid-column:1}
+  .india-main{border-right:0;padding-right:0}
+
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3>:last-child:nth-child(odd){grid-column:1/-1}
+  .fx-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pulse{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+  .newsletter__inner{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+  .footer-brand{grid-column:1/-1;padding-right:0}
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE NAV (≤ 900px)
+   ========================================================= */
+@media (max-width:900px){
+  .menu-toggle{display:inline-flex}
+  .primary-nav{display:none}
+  .primary-nav.is-open{display:block}
+  .primary-nav ul{flex-direction:column;align-items:stretch;overflow:visible}
+  .primary-nav li{border-bottom:1px solid rgba(196,198,207,.15)}
+  .primary-nav a,.primary-nav .more-btn{padding:14px var(--gutter);font-size:14px;width:100%;min-height:48px}
+  .primary-nav a[aria-current="page"]{font-size:14px;line-height:16px;padding:14px var(--gutter);border-bottom:0;border-left:3px solid var(--orange)}
+  .more-menu{position:static;border:0;border-top:1px solid rgba(196,198,207,.15);background:var(--navy)}
+  .more-menu a{padding-left:calc(var(--gutter) + 16px)}
+  .primary-nav .container{padding:0}
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE (≤ 599px, designed for 390px)
+   ========================================================= */
+@media (max-width:599px){
+  :root{--gutter:16px}
+  body{font-size:15px}
+
+  .utility__edition,.utility .vdiv,.utility__group--right .vdiv,.utility a.quick-find{display:none}
+  .brandbar .container{min-height:64px;gap:12px}
+  .brand{gap:10px}
+  .brand__logo{width:84px;height:21px}
+  .brand__name{font-size:16px;line-height:20px;letter-spacing:-.3px}
+  .brand__tag{font-size:8px;line-height:12px;letter-spacing:.6px;white-space:normal}
+  .actions{gap:8px}
+  .actions .icon-btn,.actions .avatar{display:none}
+  .actions .btn-orange{display:none}
+
+  .breaking .container{gap:10px}
+  .breaking__time{display:none}
+
+  .section{padding-top:36px}
+  .sec-title h2{font-size:20px;line-height:26px;letter-spacing:-.4px}
+  .desk{font-size:11px}
+
+  .leaderboard{flex-direction:column;align-items:flex-start;padding:14px 16px;gap:12px}
+  .leaderboard .btn-orange{width:100%;justify-content:center;min-height:44px}
+
+  .hero{grid-template-columns:1fr}
+  .hero__left,.hero__right{grid-column:1;border:0;padding:0}
+  .hero h1{font-size:28px;line-height:35px}
+  .hero__lede{font-size:16px;line-height:26px}
+  .hero-figure figcaption{position:static;flex-direction:column;gap:2px}
+  .square-btn{width:44px;height:44px}
+  .byline-actions .btn-orange{min-height:44px}
+
+  .pulse{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .india-main h3{font-size:26px;line-height:33px}
+
+  .grid-4,.grid-3{grid-template-columns:1fr}
+  .grid-3>:last-child:nth-child(odd){grid-column:auto}
+  .fx-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .analysis h3{font-size:20px;line-height:26px}
+  .cal li{flex-wrap:wrap}
+
+  .chips{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+  .chip{flex-shrink:0;min-height:36px}
+  .news-item{padding:16px 0;gap:12px}
+  .news-thumb{width:96px;height:64px}
+  .news-item h3{font-size:16px;line-height:22px}
+  .news-item .dek{display:none}
+  .btn-outline{width:100%;justify-content:center}
+
+  .newsletter{padding:36px 16px}
+  .newsletter h2{font-size:28px;line-height:35px}
+
+  .faq__q{font-size:16px;line-height:23px;min-height:48px}
+
+  .footer-top{grid-template-columns:1fr 1fr;gap:28px}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+}
+
+@media (max-width:359px){
+  .footer-top{grid-template-columns:1fr}
+  .fx-strip,.pulse{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- Reusable inline icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-arrow" viewBox="0 0 16 12"><path d="M1 6h13M9.5 1.5 14 6l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 16 12"><rect x="1" y="1" width="14" height="10" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 1.5 8 7l6.5-5.5" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 16 16"><circle cx="6.8" cy="6.8" r="5.3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.7 10.7 15 15" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 12 12"><circle cx="6" cy="3.5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.2 11.5c.6-2.6 2.5-4 4.8-4s4.2 1.4 4.8 4" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 12 12"><circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M6 3v3.2l2 1.3" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 16 12"><path d="M1 10l4.5-4.5 3 3L15 2M10.5 2H15v4.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 14 14"><path d="M1 13h12M3 10V6M6.5 10V3M10 10V7" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 14 15"><rect x="1" y="2.5" width="12" height="11.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1 6h12M4 1v3M10 1v3" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.8" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4.8 8.2 7 10.4l4.2-4.6" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 11 14"><path d="M1 1h9v12L5.5 9.8 1 13z" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-share" viewBox="0 0 14 15"><circle cx="11" cy="2.8" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="7.5" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="11" cy="12.2" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4.8 6.5 9.2 3.8M4.8 8.5l4.4 2.7" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 20 16"><rect x="1" y="1" width="18" height="14" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 5.5 7.5 8l-3 2.5M9.5 11h5" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 27 27"><rect x="1" y="1" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 20v-6M13.5 20V8M20 20v-9" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-gem" viewBox="0 0 14 14"><path d="M3 1h8l2.5 4L7 13 .5 5z M.5 5h13" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-book" viewBox="0 0 12 14"><path d="M1 1.5h7.5a2 2 0 0 1 2 2V13H3a2 2 0 0 1-2-2z M1 11a2 2 0 0 1 2-2h7.5" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 14 17"><path d="M7 1 1.5 3v5c0 3.6 2.4 6.6 5.5 7.8 3.1-1.2 5.5-4.2 5.5-7.8V3z" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-brain" viewBox="0 0 16 17"><path d="M8 2.5C6.8 1 4 1.2 3.4 3.4 1.6 3.8 1 5.8 1.9 7.2 1 8.6 1.6 10.8 3.4 11.2 3.8 13.6 6.4 14.2 8 12.8M8 2.5c1.2-1.5 4-1.3 4.6.9 1.8.4 2.4 2.4 1.5 3.8.9 1.4.3 3.6-1.5 4-.4 2.4-3 3-4.6 1.6M8 2.5v10.3" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-verify" viewBox="0 0 17 15"><path d="M1 2h15v11H1z M4 9.5l2.5 2 4.5-5" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+    <symbol id="i-balance" viewBox="0 0 17 16"><path d="M8.5 1v14M3 15h11M2 4h13M4 4 1.5 9.5h5zM13 4l-2.5 5.5h5z" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 19 15"><path d="M9.5 1 1 5.2l8.5 4.3L18 5.2zM4.5 7v4.5c3 2.2 7 2.2 10 0V7M18 5.2v5" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 17 17"><circle cx="8.5" cy="8.5" r="7.3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1.2 8.5h14.6M8.5 1.2c2.2 2.1 3 4.6 3 7.3s-.8 5.2-3 7.3c-2.2-2.1-3-4.6-3-7.3s.8-5.2 3-7.3" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-up" viewBox="0 0 6 3"><path d="M0 3 3 0l3 3z" fill="currentColor"/></symbol>
+    <symbol id="i-down" viewBox="0 0 6 3"><path d="M0 0h6L3 3z" fill="currentColor"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 18 14"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.8"/></symbol>
+
+    <!-- Built-in brand artwork: no external image files needed -->
+    <linearGradient id="g-navy" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a2342"/><stop offset="1" stop-color="#1f4373"/></linearGradient>
+    <linearGradient id="g-dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a2342"/><stop offset=".65" stop-color="#2c4d7a"/><stop offset="1" stop-color="#dc6900"/></linearGradient>
+    <linearGradient id="g-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d2f57"/><stop offset="1" stop-color="#061a33"/></linearGradient>
+    <symbol id="art-logo" viewBox="0 0 128 32">
+      <rect x=".5" y=".5" width="127" height="31" fill="#000d22" stroke="rgba(196,198,207,.35)"/>
+      <circle cx="16" cy="16" r="9.5" fill="none" stroke="#dc6900" stroke-width="1.6"/>
+      <ellipse cx="16" cy="16" rx="4.2" ry="9.5" fill="none" stroke="#dc6900" stroke-width="1.1"/>
+      <path d="M6.6 16h18.8M8 11h16M8 21h16" stroke="#dc6900" stroke-width="1"/>
+      <path d="M9 20.5l4-4 3 2.5 6.5-7" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="32" y="14.5" font-family="Georgia,'Source Serif 4',serif" font-weight="700" font-size="8.6" fill="#fff" letter-spacing=".3">GLOBAL MARKETS</text>
+      <text x="32" y="25" font-family="'Work Sans',Arial,sans-serif" font-weight="700" font-size="7.4" fill="#dc6900" letter-spacing="1.6">NEXUS</text>
+      <text x="72" y="25" font-family="'Work Sans',Arial,sans-serif" font-weight="600" font-size="5" fill="#d9e3f1" letter-spacing="1">MEDIA</text>
+    </symbol>
+    <symbol id="art-desk" viewBox="0 0 586 329" preserveAspectRatio="xMidYMid slice">
+      <rect width="586" height="329" fill="url(#g-navy)"/>
+      <rect x="0" y="0" width="586" height="34" fill="#000d22"/>
+      <g font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#d9e3f1">
+        <text x="14" y="22">S&amp;P 500 <tspan fill="#3ddc97">▲</tspan></text><text x="120" y="22">FTSE 100 <tspan fill="#3ddc97">▲</tspan></text>
+        <text x="236" y="22">NIFTY 50 <tspan fill="#3ddc97">▲</tspan></text><text x="350" y="22">NIKKEI 225 <tspan fill="#ff8a80">▼</tspan></text><text x="478" y="22">DAX <tspan fill="#3ddc97">▲</tspan></text>
+      </g>
+      <g stroke="rgba(217,227,241,.25)" stroke-width="2">
+        <rect x="40" y="62" width="150" height="96" fill="url(#g-screen)"/><rect x="218" y="56" width="150" height="102" fill="url(#g-screen)"/><rect x="396" y="62" width="150" height="96" fill="url(#g-screen)"/>
+        <rect x="40" y="172" width="150" height="92" fill="url(#g-screen)"/><rect x="218" y="172" width="150" height="92" fill="url(#g-screen)"/><rect x="396" y="172" width="150" height="92" fill="url(#g-screen)"/>
+      </g>
+      <polyline points="50,140 72,128 90,134 110,112 132,118 150,96 180,88" fill="none" stroke="#3ddc97" stroke-width="2.5"/>
+      <g fill="#3ddc97"><rect x="234" y="110" width="8" height="30"/><rect x="258" y="96" width="8" height="34"/><rect x="306" y="84" width="8" height="30"/><rect x="330" y="72" width="8" height="34"/></g>
+      <g fill="#ff8a80"><rect x="282" y="104" width="8" height="24"/><rect x="354" y="80" width="8" height="18"/></g>
+      <polyline points="406,96 430,104 452,92 474,120 498,112 520,132 536,126" fill="none" stroke="#ff8a80" stroke-width="2.5"/>
+      <polyline points="50,240 78,226 104,232 132,206 160,212 180,196" fill="none" stroke="#dc6900" stroke-width="2.5"/>
+      <g fill="rgba(217,227,241,.45)"><rect x="232" y="196" width="122" height="6"/><rect x="232" y="212" width="96" height="6"/><rect x="232" y="228" width="110" height="6"/><rect x="232" y="244" width="80" height="6"/></g>
+      <polyline points="406,250 434,238 460,244 488,214 514,220 536,200" fill="none" stroke="#3ddc97" stroke-width="2.5"/>
+      <rect x="0" y="282" width="586" height="47" fill="#061a33"/>
+    </symbol>
+    <symbol id="art-exchange" viewBox="0 0 682 383" preserveAspectRatio="xMidYMid slice">
+      <rect width="682" height="383" fill="url(#g-dusk)"/>
+      <g fill="#000d22" opacity=".55"><rect x="20" y="230" width="70" height="153"/><rect x="100" y="200" width="60" height="183"/><rect x="520" y="210" width="64" height="173"/><rect x="594" y="240" width="70" height="143"/></g>
+      <rect x="276" y="48" width="132" height="335" fill="#081c36"/>
+      <rect x="262" y="40" width="160" height="14" fill="#081c36"/>
+      <g fill="#f0b46b" opacity=".85">
+        <rect x="290" y="72" width="16" height="10"/><rect x="316" y="72" width="16" height="10"/><rect x="352" y="72" width="16" height="10"/><rect x="378" y="72" width="16" height="10"/>
+        <rect x="290" y="100" width="16" height="10"/><rect x="334" y="100" width="16" height="10"/><rect x="378" y="100" width="16" height="10"/>
+        <rect x="316" y="128" width="16" height="10"/><rect x="352" y="128" width="16" height="10"/><rect x="290" y="156" width="16" height="10"/><rect x="378" y="156" width="16" height="10"/>
+        <rect x="316" y="184" width="16" height="10"/><rect x="352" y="184" width="16" height="10"/><rect x="290" y="212" width="16" height="10"/><rect x="334" y="212" width="16" height="10"/><rect x="378" y="240" width="16" height="10"/>
+        <rect x="316" y="268" width="16" height="10"/><rect x="352" y="296" width="16" height="10"/><rect x="290" y="296" width="16" height="10"/>
+      </g>
+      <rect x="0" y="352" width="682" height="31" fill="#000d22"/>
+    </symbol>
+    <symbol id="art-corp" viewBox="0 0 142 78" preserveAspectRatio="xMidYMid slice">
+      <rect width="142" height="78" fill="url(#g-dusk)"/>
+      <g fill="#081c36"><rect x="14" y="30" width="20" height="48"/><rect x="40" y="14" width="26" height="64"/><rect x="72" y="24" width="22" height="54"/><rect x="100" y="36" width="28" height="42"/></g>
+      <g fill="#f0b46b" opacity=".8"><rect x="46" y="22" width="5" height="4"/><rect x="56" y="30" width="5" height="4"/><rect x="46" y="40" width="5" height="4"/><rect x="78" y="34" width="5" height="4"/><rect x="106" y="46" width="5" height="4"/><rect x="116" y="54" width="5" height="4"/></g>
+    </symbol>
+    <symbol id="art-treasury" viewBox="0 0 142 78" preserveAspectRatio="xMidYMid slice">
+      <rect width="142" height="78" fill="url(#g-navy)"/>
+      <path d="M24 30 71 12l47 18z" fill="#d9e3f1"/>
+      <rect x="26" y="30" width="90" height="5" fill="#d9e3f1"/>
+      <g fill="#d9e3f1"><rect x="32" y="38" width="7" height="28"/><rect x="48" y="38" width="7" height="28"/><rect x="64" y="38" width="7" height="28"/><rect x="80" y="38" width="7" height="28"/><rect x="96" y="38" width="7" height="28"/></g>
+      <rect x="22" y="66" width="98" height="6" fill="#d9e3f1"/>
+    </symbol>
+    <symbol id="art-network" viewBox="0 0 142 78" preserveAspectRatio="xMidYMid slice">
+      <rect width="142" height="78" fill="#000d22"/>
+      <g stroke="rgba(217,227,241,.45)" stroke-width="1"><path d="M20 20 52 40 90 18 122 44 92 62 52 40 30 62M90 18 92 62"/></g>
+      <g fill="#dc6900"><circle cx="20" cy="20" r="3.5"/><circle cx="52" cy="40" r="4.5"/><circle cx="90" cy="18" r="3.5"/><circle cx="122" cy="44" r="3.5"/><circle cx="92" cy="62" r="4"/><circle cx="30" cy="62" r="3"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+<header class="site-header">
+  <div class="utility">
+    <div class="container">
+      <div class="utility__group">
+        <span class="utility__text utility__date" id="todayDate">FRIDAY, OCTOBER 24, 2025</span>
+        <span class="vdiv" aria-hidden="true"></span>
+        <span class="utility__text utility__edition">Edition: <strong>Global Edition</strong>
+          <svg class="svg-ic" width="6" height="4" aria-hidden="true"><use href="#i-chev"/></svg></span>
+      </div>
+      <div class="utility__group utility__group--right">
+        <a class="utility__text" href="#newsletter">
+          <svg class="svg-ic" width="12" height="9" aria-hidden="true"><use href="#i-mail"/></svg>Free Newsletter</a>
+        <span class="vdiv" aria-hidden="true"></span>
+        <a class="utility__text quick-find" href="#latest">
+          <svg class="svg-ic" width="11" height="11" aria-hidden="true"><use href="#i-search"/></svg>Quick Find (⌘K)</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="brandbar">
+    <div class="container">
+      <a class="brand" href="#top" aria-label="Global Markets Nexus — home">
+        <svg class="brand__logo" viewBox="0 0 128 32" role="img" aria-label="GMN logo"><use href="#art-logo"/></svg>
+        <span class="brand__text">
+          <span class="brand__name">GLOBAL MARKETS NEXUS</span>
+          <span class="brand__tag">GLOBAL FINANCE. CLEAR PERSPECTIVES.</span>
+        </span>
+      </a>
+
+      <nav class="quicklinks" aria-label="Quick topics">
+        <a href="#markets">Global Indices</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#forex">Central Banks</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#us">Earnings</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#us">Yield Curve</a>
+      </nav>
+
+      <div class="actions">
+        <button class="icon-btn" type="button" aria-label="Search" data-scroll-to="#latest">
+          <svg class="svg-ic" width="15" height="15" aria-hidden="true"><use href="#i-search"/></svg>
+        </button>
+        <a class="signin" href="#">Sign In</a>
+        <a class="btn-orange" href="#newsletter">Subscribe
+          <svg class="svg-ic" width="14" height="9" aria-hidden="true"><use href="#i-trend"/></svg></a>
+        <span class="avatar" aria-hidden="true"><svg class="svg-ic" width="12" height="12"><use href="#i-user"/></svg></span>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav" aria-label="Open menu">
+          <svg class="svg-ic" width="18" height="14" aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="primary-nav" id="primaryNav" aria-label="Main">
+    <div class="container">
+      <ul>
+        <li><a href="#top" aria-current="page">Home</a></li>
+        <li><a href="#india">India Markets</a></li>
+        <li><a href="#us">US Markets</a></li>
+        <li><a href="#forex">Forex</a></li>
+        <li><a href="#crypto">Crypto</a></li>
+        <li><a href="#us">Stocks</a></li>
+        <li><a href="#investing">Mutual Funds</a></li>
+        <li><a href="#economy">Economy</a></li>
+        <li><a href="#economy">Commodities</a></li>
+        <li><a href="#investing">Personal Finance</a></li>
+        <li><a href="#education">Education</a></li>
+        <li>
+          <button class="more-btn" type="button" aria-expanded="false" aria-controls="moreMenu">More
+            <svg class="svg-ic" width="7" height="5" aria-hidden="true"><use href="#i-chev"/></svg></button>
+          <div class="more-menu" id="moreMenu">
+            <a href="#latest">Latest News</a>
+            <a href="#pledge">About GMN &amp; Editorial Policy</a>
+            <a href="#faq">FAQ &amp; Contact</a>
+            <a href="#disclaimer">Financial Disclaimer</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="breaking" role="region" aria-label="Breaking news">
+    <div class="container">
+      <span class="badge-breaking">BREAKING</span>
+      <p class="breaking__text">
+        <strong>Federal Reserve Signals Calibrated Rate Stance Amid Cooling Core Inflation; Global Equities Rebound Across European and Asian Sessions</strong><span class="dot" aria-hidden="true">•</span><span class="sub">RBI Keeps Repo Rate Unchanged at 6.50%</span>
+      </p>
+      <span class="breaking__time"><svg class="svg-ic" width="12" height="12" aria-hidden="true"><use href="#i-clock"/></svg>Updated 12m ago</span>
+    </div>
+  </div>
+
+  <!-- Market ticker: SAMPLE values from the Figma design — not live data -->
+  <div class="ticker" id="markets" role="region" aria-label="Market ticker (sample values, not live)">
+    <div class="ticker__scroll">
+      <ul class="ticker__list">
+        <li><span class="sample-tag" title="Sample values from the design. Not connected to live market data.">SAMPLE DATA</span></li>
+        <li class="tick"><span class="tick__sym">NIFTY 50</span><span class="tick__px">24,852.15</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+142.30 (+0.58%)</span></li>
+        <li class="tick"><span class="tick__sym">SENSEX</span><span class="tick__px">81,425.60</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+468.20 (+0.58%)</span></li>
+        <li class="tick"><span class="tick__sym">BANK NIFTY</span><span class="tick__px">51,780.40</span><span class="tick__chg down"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-down"/></svg>-115.10 (-0.22%)</span></li>
+        <li class="tick"><span class="tick__sym">S&amp;P 500</span><span class="tick__px">5,864.67</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+24.15 (+0.41%)</span></li>
+        <li class="tick"><span class="tick__sym">NASDAQ</span><span class="tick__px">18,518.61</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+88.42 (+0.48%)</span></li>
+        <li class="tick"><span class="tick__sym">DOW JONES</span><span class="tick__px">42,931.60</span><span class="tick__chg down"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-down"/></svg>-35.20 (-0.08%)</span></li>
+        <li class="tick"><span class="tick__sym">EUR/USD</span><span class="tick__px">1.0825</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+0.0018 (+0.17%)</span></li>
+        <li class="tick"><span class="tick__sym">USD/JPY</span><span class="tick__px">152.44</span><span class="tick__chg down"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-down"/></svg>-0.32 (-0.21%)</span></li>
+        <li class="tick"><span class="tick__sym">BITCOIN</span><span class="tick__px">$67,840.00</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+1,420.00 (+2.14%)</span></li>
+        <li class="tick"><span class="tick__sym">ETHEREUM</span><span class="tick__px">$2,540.80</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+64.20 (+2.59%)</span></li>
+        <li class="tick"><span class="tick__sym">GOLD (oz)</span><span class="tick__px">$2,735.40</span><span class="tick__chg up"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-up"/></svg>+12.80 (+0.47%)</span></li>
+        <li class="tick"><span class="tick__sym">BRENT CRUDE</span><span class="tick__px">$74.29</span><span class="tick__chg down"><svg class="svg-ic" width="6" height="3" aria-hidden="true"><use href="#i-down"/></svg>-0.88 (-1.17%)</span></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <!-- ===================================================
+         1. LEADERBOARD ADVERTISEMENT
+         =================================================== -->
+    <aside class="ad-top" aria-label="Advertisement">
+      <p class="ad-label">ADVERTISEMENT • SPONSORED CONTENT</p>
+      <div class="leaderboard">
+        <div class="leaderboard__info">
+          <span class="leaderboard__icon" aria-hidden="true"><svg class="svg-ic" width="20" height="16"><use href="#i-terminal"/></svg></span>
+          <div>
+            <p class="leaderboard__title">NEXUS TERMINAL PRO v25</p>
+            <p class="leaderboard__copy">Real-time institutional order flow, algorithmic execution &amp; tick-level analytics.</p>
+          </div>
+        </div>
+        <a class="btn-orange" href="#">REQUEST DEMO
+          <svg class="svg-ic" width="15" height="11" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </aside>
+
+    <!-- ===================================================
+         2. MAIN FINANCIAL NEWS HERO
+         =================================================== -->
+    <section class="hero" aria-label="Top stories">
+      <!-- Left rail -->
+      <div class="hero__left">
+        <div class="rail-head">
+          <h2>MARKET BRIEFS</h2>
+          <span class="sec-meta mono">LATEST</span>
+        </div>
+        <article class="brief">
+          <div class="brief__meta"><span class="kicker">FIXED INCOME</span><span class="dot" aria-hidden="true">•</span><time>8m ago</time></div>
+          <h3><a href="#">Treasury Yields Stabilize Around 4.22% as Rate-Cut Path Clarifies</a></h3>
+          <p>Benchmark 10-year note holds steady following institutional repricing of…</p>
+        </article>
+        <article class="brief">
+          <div class="brief__meta"><span class="kicker">TECH EQUITIES</span><span class="dot" aria-hidden="true">•</span><time>22m ago</time></div>
+          <h3><a href="#">Asian Semiconductor Rally Led by TSMC and Tokyo Electron</a></h3>
+          <p>Advanced node packaging demand offsets consumer electronics softness as…</p>
+        </article>
+        <article class="brief">
+          <div class="brief__meta"><span class="kicker">ENERGY</span><span class="dot" aria-hidden="true">•</span><time>45m ago</time></div>
+          <h3><a href="#">Crude Oil Pressured by Rising US Inventories and Demand Headwinds</a></h3>
+          <p>Brent contracts dip below $75 as commercial crude stockpiles register…</p>
+        </article>
+        <article class="brief">
+          <div class="brief__meta"><span class="kicker">CENTRAL BANKS</span><span class="dot" aria-hidden="true">•</span><time>1h ago</time></div>
+          <h3><a href="#">European Central Bank Emphasizes Data-Dependent Policy for Q4</a></h3>
+          <p>Governing council highlights lingering wage pressures even as headline…</p>
+        </article>
+        <div class="memo-wrap">
+          <div class="memo">
+            <div class="memo__head">DESK MEMO <svg class="svg-ic" width="15" height="11" aria-hidden="true" style="color:var(--orange)"><use href="#i-trend"/></svg></div>
+            <blockquote>"Sovereign curve steepening reflects systematic term-premium re-evaluations rather than immediate fiscal distress."</blockquote>
+            <cite>— Macro Strategy Team</cite>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: featured story -->
+      <article class="hero__center">
+        <div class="cat-badge">
+          <span class="cat-badge__main">SPECIAL REPORT • GLOBAL MONETARY POLICY</span>
+          <span class="cat-badge__sub">CROSS-ASSET PERSPECTIVE</span>
+        </div>
+        <h1>Understanding the Forces Shaping Global Financial Markets</h1>
+        <figure class="hero-figure">
+          <div class="media" data-label="Global Financial Markets Trading Desk">
+            <svg class="media__art" role="img" aria-label="Illustration of a financial trading desk with market screens" preserveAspectRatio="xMidYMid slice"><use href="#art-desk"/></svg>
+          </div>
+          <figcaption><span>Global Markets Nexus Trading Intelligence Floor • Active session monitoring</span><span class="mono">INDEX STRENGTH: 98.4</span></figcaption>
+        </figure>
+        <p class="hero__lede">Explore economic indicators, central bank decisions, currency movements, and corporate developments influencing financial markets around the world. Structural re-alignments in sovereign liquidity and sovereign balance sheets demand recalibrated capital risk assessments.</p>
+        <div class="takeaways">
+          <p class="takeaways__head"><svg class="svg-ic" width="15" height="14" aria-hidden="true" style="color:var(--orange)"><use href="#i-check"/></svg>CORE ANALYTICAL TAKEAWAYS</p>
+          <ul>
+            <li><strong>Interest Rate Divergence:</strong> Western and Asian monetary authorities exhibit asynchronous loosening profiles.</li>
+            <li><strong>Supply Chain Normalization:</strong> Industrial inventory replenishment shifts toward regional proximity networks.</li>
+            <li><strong>Liquidity Realignment:</strong> Corporate debt refinancing costs demand higher structural return-on-equity bars.</li>
+          </ul>
+        </div>
+        <div class="hero__byline">
+          <div class="byline-box">
+            <p>By <strong>GMN Global Economics Desk</strong> • Mumbai &amp; New York Bureaus • Published Oct 24, 2025 • 6 min read</p>
+            <div class="byline-actions">
+              <a class="btn-orange" href="#">READ FULL ANALYSIS
+                <svg class="svg-ic" width="14" height="8" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+              <button class="square-btn" type="button" aria-label="Save article"><svg class="svg-ic" width="11" height="14" aria-hidden="true"><use href="#i-bookmark"/></svg></button>
+              <button class="square-btn" type="button" aria-label="Share article" id="shareBtn"><svg class="svg-ic" width="14" height="15" aria-hidden="true"><use href="#i-share"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Right rail -->
+      <div class="hero__right">
+        <div class="watch">
+          <div class="watch__head">
+            <h2><svg class="svg-ic" width="14" height="14" aria-hidden="true" style="color:var(--blue)"><use href="#i-chart"/></svg>MARKET WATCH</h2>
+            <span class="sec-meta mono" style="font-size:10px" title="Sample values. Not connected to live market data.">SAMPLE DATA</span>
+          </div>
+          <div class="watch__tabs" role="tablist" aria-label="Market watch categories">
+            <button class="watch__tab" role="tab" aria-selected="true" aria-controls="watchPanel" data-set="indices">INDICES</button>
+            <button class="watch__tab" role="tab" aria-selected="false" aria-controls="watchPanel" data-set="forex">FOREX</button>
+            <button class="watch__tab" role="tab" aria-selected="false" aria-controls="watchPanel" data-set="commodity">COMMODITY</button>
+          </div>
+          <div class="watch__table" id="watchPanel" role="tabpanel" aria-live="polite">
+            <!-- filled by script; default rows for no-JS -->
+            <div class="watch__row"><b>S&amp;P 500</b><span>5,864.67 <em class="up">+0.41%</em></span></div>
+            <div class="watch__row"><b>NASDAQ 100</b><span>20,385.12 <em class="up">+0.55%</em></span></div>
+            <div class="watch__row"><b>NIFTY 50</b><span>24,852.15 <em class="up">+0.58%</em></span></div>
+            <div class="watch__row"><b>FTSE 100</b><span>8,245.30 <em class="down">-0.14%</em></span></div>
+            <div class="watch__row"><b>NIKKEI 225</b><span>38,981.75 <em class="up">+0.11%</em></span></div>
+          </div>
+        </div>
+
+        <div class="mostread">
+          <div class="mostread__head"><h2>MOST READ STORIES</h2><span class="sec-meta">TODAY</span></div>
+          <ol>
+            <li><span class="mostread__n">1</span><div><h3><a href="#">Banking Sector Resiliency in Emerging Markets: RBI's Governance Blueprint</a></h3><p>Banking &amp; Regulations • 14k views</p></div></li>
+            <li><span class="mostread__n">2</span><div><h3><a href="#">AI Infrastructure Capex: Hyperscalers Double Down Amid Valuation Scrutiny</a></h3><p>Enterprise Tech • 11k views</p></div></li>
+            <li><span class="mostread__n">3</span><div><h3><a href="#">Rupee Consolidates vs USD as FII Flows Balance Trade Deficit</a></h3><p>Currencies • 9.4k views</p></div></li>
+            <li><span class="mostread__n">4</span><div><h3><a href="#">Gold Reaches Historic Highs: Geopolitical Hedge or Monetary Signal?</a></h3><p>Commodities • 8.1k views</p></div></li>
+            <li><span class="mostread__n">5</span><div><h3><a href="#">Zero-Day Option Volumes Rise: Retail vs Institutional Flows Examined</a></h3><p>Derivatives • 7.5k views</p></div></li>
+          </ol>
+        </div>
+
+        <aside class="mrec" aria-label="Advertisement">
+          <p class="mrec__label">SPONSORED BRIEF</p>
+          <div class="mrec__body">
+            <svg class="svg-ic" width="27" height="27" aria-hidden="true"><use href="#i-bars"/></svg>
+            <h3>Institutional Alpha Desk</h3>
+            <p>Quantitative execution reports and macro stress tests for asset managers.</p>
+          </div>
+          <a href="#">EXPLORE RESEARCH</a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         3. INDIA MARKETS
+         =================================================== -->
+    <section class="section" id="india" aria-labelledby="india-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--orange)">
+          <h2 id="india-h">INDIA MARKETS</h2>
+          <span class="desk" style="--deskc:var(--blue)">DALAL STREET DESK</span>
+        </div>
+        <a class="sec-link" href="#">View All India Coverage <svg class="svg-ic" width="11" height="11" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+
+      <dl class="pulse" aria-label="India indices (sample values)">
+        <div class="pulse__item"><dt>NIFTY 50</dt><dd>24,852.15 <span class="up">+0.58%</span></dd></div>
+        <div class="pulse__item"><dt>SENSEX</dt><dd>81,425.60 <span class="up">+0.58%</span></dd></div>
+        <div class="pulse__item"><dt>BANK NIFTY</dt><dd>51,780.40 <span class="down">-0.22%</span></dd></div>
+        <div class="pulse__item"><dt>INDIA VIX</dt><dd>13.42 <span class="down">-3.45%</span></dd></div>
+        <div class="pulse__item"><dt>NIFTY IT</dt><dd>42,390.80 <span class="up">+1.24%</span></dd></div>
+      </dl>
+
+      <div class="split-7-5 india-grid">
+        <article class="india-main">
+          <div class="media-frame">
+            <span class="flag">FEATURE ANALYSIS</span>
+            <div class="media" data-label="Bombay Stock Exchange — Mumbai">
+              <svg class="media__art" role="img" aria-label="Illustration of a stock exchange tower at dusk" preserveAspectRatio="xMidYMid slice"><use href="#art-exchange"/></svg>
+            </div>
+          </div>
+          <h3><a href="#">NIFTY 50 and Sensex Scale Record Milestones as Domestic Institutional Inflows Offset Global Volatility</a></h3>
+          <p class="dek">Strong corporate earnings reports across Tata Consultancy Services, Reliance Industries, and ICICI Bank reinforce structural domestic growth thesis. Systematic SIP allocations breach historic monthly volumes of ₹24,500 crore.</p>
+          <p class="bylinerow"><strong>Dalal Street Bureau</strong><span aria-hidden="true">•</span><span>Mumbai</span><span aria-hidden="true">•</span><time>Oct 24, 2025</time><span aria-hidden="true">•</span><span class="read">4 min read</span></p>
+        </article>
+
+        <div class="india-cards">
+          <article class="card card--tint">
+            <span class="kicker k-orange">BANKING STOCKS</span>
+            <h4 class="h-card"><a href="#">Banking Giants Post Robust NIMs: SBI, HDFC Bank Credit Growth Trajectory</a></h4>
+            <p class="dek">Net interest margins maintain stability despite retail deposit repricing pressures across urban commercial branches.</p>
+            <time>Oct 24, 2025 • 2h ago</time>
+          </article>
+          <article class="card card--tint">
+            <span class="kicker k-blue">IPO WATCH</span>
+            <h4 class="h-card"><a href="#">Upcoming Tech IPO Pipeline: SEBI Clearance for Six New Draft Red Herring Prospectuses</a></h4>
+            <p class="dek">Enterprise SaaS and consumer fintech issuers seek aggregate domestic liquidity pool of over ₹18,000 crore.</p>
+            <time>Oct 24, 2025 • 3h ago</time>
+          </article>
+          <article class="card card--tint">
+            <span class="kicker k-ink">POLICY &amp; ECONOMY</span>
+            <h4 class="h-card"><a href="#">RBI Monetary Policy Outlook: Why India's Inflation-Targeting Framework Anchors Macro Stability</a></h4>
+            <p class="dek">Governor Das reiterates commitment to the 4% target midpoint as food price shocks moderate into winter harvest.</p>
+            <time>Oct 24, 2025 • 5h ago</time>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         4. US MARKETS
+         =================================================== -->
+    <section class="section" id="us" aria-labelledby="us-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--blue)">
+          <h2 id="us-h">US MARKETS &amp; WALL STREET</h2>
+          <span class="desk">NEW YORK DESK</span>
+        </div>
+        <a class="sec-link" href="#">Explore US Coverage <svg class="svg-ic" width="11" height="11" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="grid-4" style="margin-top:20px">
+        <article class="card card--white">
+          <div class="card__body" style="padding-top:6px">
+            <span class="kicker k-orange">NASDAQ / TECH</span>
+            <h3 class="h-card"><a href="#">Tech Megacaps Navigate Earnings Season: Cloud &amp; Generative AI Revenue Realization</a></h3>
+            <p class="dek">Investors evaluate software revenue conversion metrics against accelerating capital expenditure allocations for GPU</p>
+          </div>
+          <div class="meta-row"><span>By Wall St. Bureau</span><time>40m ago</time></div>
+        </article>
+        <article class="card card--white">
+          <div class="card__body" style="padding-top:6px">
+            <span class="kicker k-ink">MONETARY POLICY</span>
+            <h3 class="h-card"><a href="#">Federal Reserve Balance Sheet Normalization: Quantitative Tightening Progress in 2025</a></h3>
+            <p class="dek">Run-off rates on Treasury and MBS paper remain orderly as overnight reverse repurchase agreements stabilize</p>
+          </div>
+          <div class="meta-row"><span>Macro Research</span><time>1h ago</time></div>
+        </article>
+        <article class="card card--white">
+          <div class="card__body" style="padding-top:6px">
+            <span class="kicker k-blue">RETAIL &amp; CONSUMER</span>
+            <h3 class="h-card"><a href="#">Consumer Discretionary Spending Remains Resilient Despite Real Wage Headwinds</a></h3>
+            <p class="dek">Omnichannel retail sales prints show bifurcated patterns with premium luxury and discount bulk-retailers…</p>
+          </div>
+          <div class="meta-row"><span>Consumer Desk</span><time>2h ago</time></div>
+        </article>
+        <article class="card card--white">
+          <div class="card__body" style="padding-top:6px">
+            <span class="kicker k-ink">DEBT MARKETS</span>
+            <h3 class="h-card"><a href="#">Corporate Bond Spreads Tighten to Multi-Year Lows Amid Solid Credit Fundamentals</a></h3>
+            <p class="dek">Investment-grade and high-yield spreads reflect minimal systemic default probabilities as corporate…</p>
+          </div>
+          <div class="meta-row"><span>Credit Strategy</span><time>3h ago</time></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         5. FOREX & CURRENCIES
+         =================================================== -->
+    <section class="section" id="forex" aria-labelledby="fx-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--orange)">
+          <h2 id="fx-h">FOREX &amp; GLOBAL CURRENCY NEXUS</h2>
+          <span class="desk">INTERBANK FX</span>
+        </div>
+        <span class="sec-meta mono">SETTLEMENT: T+2</span>
+      </div>
+
+      <ul class="fx-strip" aria-label="Currency pairs (sample values)">
+        <li class="fx"><span class="fx__pair">EUR / USD</span><span class="fx__px">1.0825</span><span class="fx__chg up">+0.17%</span></li>
+        <li class="fx"><span class="fx__pair">GBP / USD</span><span class="fx__px">1.2980</span><span class="fx__chg up">+0.24%</span></li>
+        <li class="fx"><span class="fx__pair">USD / JPY</span><span class="fx__px">152.44</span><span class="fx__chg down">-0.21%</span></li>
+        <li class="fx"><span class="fx__pair">USD / INR</span><span class="fx__px">84.08</span><span class="fx__chg down">-0.04%</span></li>
+        <li class="fx"><span class="fx__pair">AUD / USD</span><span class="fx__px">0.6650</span><span class="fx__chg up">+0.12%</span></li>
+        <li class="fx"><span class="fx__pair">USD / CHF</span><span class="fx__px">0.8660</span><span class="fx__chg down">-0.08%</span></li>
+      </ul>
+
+      <div class="split-7-5" style="margin-top:24px">
+        <article class="analysis">
+          <div class="card__body">
+            <span class="kicker k-blue">POLICY SYNCHRONIZATION ANALYSIS</span>
+            <h3><a href="#">Central Bank Divergence: How Fed, ECB, and BOJ Rate Paths Are Reshaping FX Volatility</a></h3>
+            <p class="body">Cross-currency swap bases and real-yield interest differentials continue to dictate foreign exchange movements. While the Bank of Japan assesses gradual normalization steps, European economic deceleration exerts downward bias on the single currency, anchoring dollar strength throughout institutional portfolios.</p>
+          </div>
+          <div class="meta-row"><span>By Forex Macro Insights Group</span><span>Updated today • 5 min read</span></div>
+        </article>
+
+        <aside class="widget" aria-labelledby="cal-h">
+          <div class="widget__head">
+            <h3 id="cal-h"><svg class="svg-ic" width="14" height="15" aria-hidden="true" style="color:var(--blue)"><use href="#i-cal"/></svg>ECONOMIC CALENDAR</h3>
+            <span class="sec-meta">THIS WEEK</span>
+          </div>
+          <ul class="cal">
+            <li><div><b>US Non-Farm Payrolls</b><small>Consensus: +145K | Prior: +142K</small></div><span class="impact impact--high">HIGH IMPACT</span></li>
+            <li><div><b>ECB Rate Decision</b><small>Expected: 25 bps cut to 3.25%</small></div><span class="impact impact--high">HIGH IMPACT</span></li>
+            <li><div><b>India CPI Inflation</b><small>Consensus: 4.80% | Target: 4.00%</small></div><span class="impact impact--med">MEDIUM</span></li>
+            <li><div><b>Japan Trade Balance</b><small>Export Growth: +4.3% YoY</small></div><span class="impact impact--med">MEDIUM</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         6. DIGITAL ASSETS
+         =================================================== -->
+    <section class="section" id="crypto" aria-labelledby="crypto-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--ink)">
+          <h2 id="crypto-h">DIGITAL ASSETS &amp; BLOCKCHAIN</h2>
+          <span class="desk" style="--deskc:var(--blue)">INSTITUTIONAL PROTOCOLS</span>
+        </div>
+        <span class="sec-meta mono" style="font-size:12px">TOTAL CAP: $2.38T (+1.8%)</span>
+      </div>
+      <div class="grid-3" style="margin-top:20px">
+        <article class="card card--tint">
+          <div class="card__body" style="gap:7px">
+            <div class="crypto-top"><span>BTC / USD</span><span class="up">$67,840.00 (+2.14%)</span></div>
+            <h3 class="h-card h-card--ink"><a href="#">Institutional ETF Inflows Drive Bitcoin Dominance: Assessing Treasury Allocations</a></h3>
+            <p class="dek dek--loose">Spot exchange-traded products cross record net positive subscription tallies as pension systems and endowment allocators introduce small alternative mandates.</p>
+          </div>
+          <div class="meta-row"><span>Digital Asset Desk</span><time>Oct 24, 2025</time></div>
+        </article>
+        <article class="card card--tint">
+          <div class="card__body" style="gap:7px">
+            <div class="crypto-top"><span>ETH / USD</span><span class="up">$2,540.80 (+2.59%)</span></div>
+            <h3 class="h-card h-card--ink"><a href="#">Ethereum Layer-2 Fee Dynamics and Staking Yield Evolution</a></h3>
+            <p class="dek dek--loose">Blob space utilization metrics and base layer staking yields maintain equilibrium following protocol-level fee schedule recalibrations.</p>
+          </div>
+          <div class="meta-row"><span>Decentralized Infrastructure</span><time>Oct 24, 2025</time></div>
+        </article>
+        <article class="card card--tint">
+          <div class="card__body" style="gap:7px">
+            <div class="crypto-top"><span>GLOBAL REGULATION</span><span class="kicker k-blue" style="font-family:var(--sans);letter-spacing:0">COMPLIANCE</span></div>
+            <h3 class="h-card h-card--ink"><a href="#">Global Regulatory Frameworks: MiCA Implementation in Europe and SEC Guidance in the US</a></h3>
+            <p class="dek dek--loose">European markets embrace synchronized asset classification under MiCA regime, setting a benchmark for cross-border custodian governance standards.</p>
+          </div>
+          <div class="meta-row"><span>Legal &amp; Policy Bureau</span><time>Oct 24, 2025</time></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         7. INVESTING & WEALTH MANAGEMENT
+         =================================================== -->
+    <section class="section" id="investing" aria-labelledby="inv-h">
+      <div class="sec-head sec-head--end">
+        <div>
+          <div class="sec-title" style="--bar:var(--orange)"><h2 id="inv-h">INVESTING &amp; WEALTH MANAGEMENT</h2></div>
+          <p class="sec-sub">Demystifying capital allocation, portfolio construction, and risk management for institutional and individual allocators.</p>
+        </div>
+        <a class="sec-link" href="#">Curated Wealth Guides <svg class="svg-ic" width="11" height="11" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="grid-4" style="margin-top:20px">
+        <article class="card card--white">
+          <div class="card__body">
+            <span class="num-badge" aria-hidden="true">01</span>
+            <h3 class="h-card h-card--ink" style="padding-top:3px"><a href="#">The Power of Compounding: Systematic Investment Plans (SIP) Through Market Cycles</a></h3>
+            <p class="dek dek--loose">Why dollar-cost averaging neutralizes behavioral drawdown panic and smooths out volatility curves across multi-decade horizons.</p>
+          </div>
+          <p class="guide-foot">LONG-TERM STRATEGY</p>
+        </article>
+        <article class="card card--white">
+          <div class="card__body">
+            <span class="num-badge" aria-hidden="true">02</span>
+            <h3 class="h-card h-card--ink" style="padding-top:3px"><a href="#">Active Mutual Funds vs. Low-Cost Index ETFs: Cost Efficiency and Tracking Error</a></h3>
+            <p class="dek dek--loose">Analyzing total expense ratios (TER) and cash drag metrics against active management alpha generation in large versus mid-cap universes.</p>
+          </div>
+          <p class="guide-foot">VEHICLE SELECTION</p>
+        </article>
+        <article class="card card--white">
+          <div class="card__body">
+            <span class="num-badge" aria-hidden="true">03</span>
+            <h3 class="h-card h-card--ink" style="padding-top:3px"><a href="#">Asset Allocation Mastery: Balancing Equity Risk with Debt and Precious Metals</a></h3>
+            <p class="dek dek--loose">Constructing non-correlated asset distributions that maintain real purchasing power during unexpected inflationary regime shifts.</p>
+          </div>
+          <p class="guide-foot">PORTFOLIO THEORY</p>
+        </article>
+        <article class="card card--white">
+          <div class="card__body">
+            <span class="num-badge" aria-hidden="true">04</span>
+            <h3 class="h-card h-card--ink" style="padding-top:3px"><a href="#">Emergency Funds and Debt Management: Foundational Rules Before Equity Exposure</a></h3>
+            <p class="dek dek--loose">The necessity of high-liquidity shock absorbers and retiring high-interest obligations before committing risk capital to public equities.</p>
+          </div>
+          <p class="guide-foot">FOUNDATION RULES</p>
+        </article>
+      </div>
+      <p class="notice" id="disclaimer"><strong>EDITORIAL NOTICE:</strong> ALL FINANCIAL EDUCATION CONTENT IS PROVIDED FOR INFORMATIONAL AND EDITORIAL PURPOSES ONLY AND DOES NOT CONSTITUTE PERSONALIZED INVESTMENT ADVICE.</p>
+    </section>
+
+    <!-- ===================================================
+         8. GLOBAL ECONOMY & COMMODITIES
+         =================================================== -->
+    <section class="section" id="economy" aria-labelledby="eco-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--ink)">
+          <h2 id="eco-h">GLOBAL ECONOMY &amp; COMMODITIES</h2>
+          <span class="desk">SUPPLY CHAINS &amp; RESOURCES</span>
+        </div>
+      </div>
+      <div class="split-7-5" style="margin-top:20px">
+        <article class="analysis">
+          <div class="card__body">
+            <span class="kicker k-orange">INTERNATIONAL TRADE FLOWS</span>
+            <h3><a href="#">Global Trade Corridors in Transition: Supply Chain Reshoring and Nearshoring Dynamics</a></h3>
+            <p class="body">Industrial logistics networks undergo generational structural restructuring. From Mexico to Southeast Asian hubs, capital expenditure investments follow sovereign supply chain resilience mandates, creating localized capital cycles and altered container freight pricing structures.</p>
+          </div>
+          <div class="meta-row"><span>By Global Trade Desk • Geneva &amp; Singapore</span><time>Updated Oct 24, 2025</time></div>
+        </article>
+        <aside class="widget" aria-labelledby="cmd-h">
+          <div class="widget__head">
+            <h3 id="cmd-h"><svg class="svg-ic" width="14" height="14" aria-hidden="true" style="color:var(--orange)"><use href="#i-gem"/></svg>COMMODITIES TICKER</h3>
+            <span class="sec-meta mono">NYMEX / LME / MCX</span>
+          </div>
+          <ul class="cmdty" aria-label="Commodity prices (sample values)">
+            <li><b>Gold (oz)</b><span>$2,735.40 <em class="up">+0.47%</em></span></li>
+            <li><b>Silver (oz)</b><span>$33.80 <em class="up">+1.20%</em></span></li>
+            <li><b>Brent Crude (bbl)</b><span>$74.29 <em class="down">-1.17%</em></span></li>
+            <li><b>Natural Gas (MMBtu)</b><span>$2.52 <em class="up">+2.10%</em></span></li>
+            <li><b>Copper (lb)</b><span>$4.35 <em class="up">+0.65%</em></span></li>
+          </ul>
+          <p class="dek dek--loose" style="padding-top:4px">Precious metals continue their safe-haven breakout supported by global central bank net purchasing, while fossil energy contracts face inventory accumulation dampeners.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         9. TRADING & MARKET EDUCATION
+         =================================================== -->
+    <section class="section" id="education" aria-labelledby="edu-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--orange)">
+          <h2 id="edu-h">TRADING &amp; MARKET EDUCATION</h2>
+          <span class="desk" style="--deskc:var(--blue)">EDITORIAL ACADEMY</span>
+        </div>
+      </div>
+      <div class="grid-3 pillars" style="margin-top:20px">
+        <article class="card card--white">
+          <div class="card__body" style="gap:7px">
+            <span class="pillar-kicker"><svg class="svg-ic" width="12" height="13" aria-hidden="true"><use href="#i-book"/></svg>PILLAR 1 • METHODOLOGY</span>
+            <h3 class="h-card h-card--ink"><a href="#">Foundations of Technical Analysis: Moving Averages, RSI, and Volume Confirmation</a></h3>
+            <p class="dek dek--loose">How institutional desk traders synthesize exponential moving averages and relative momentum indicators without succumbing to indicator saturation or false signal clusters.</p>
+          </div>
+          <a class="pillar-link" href="#">Explore Technical Modules <svg class="svg-ic" width="13" height="9" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="card card--white">
+          <div class="card__body" style="gap:7px">
+            <span class="pillar-kicker"><svg class="svg-ic" width="13" height="17" aria-hidden="true"><use href="#i-shield"/></svg>PILLAR 2 • RISK MANAGEMENT</span>
+            <h3 class="h-card h-card--ink"><a href="#">Risk Management &amp; Position Sizing: Why Capital Preservation Precedes Returns</a></h3>
+            <p class="dek dek--loose">Mathematical modeling of maximum drawdown tolerances, Kelly criterion adaptations, and strict stop-loss discipline as the true determinants of multi-year survival.</p>
+          </div>
+          <a class="pillar-link" href="#">Explore Risk Models <svg class="svg-ic" width="13" height="9" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </article>
+        <article class="card card--white">
+          <div class="card__body" style="gap:7px">
+            <span class="pillar-kicker"><svg class="svg-ic" width="16" height="17" aria-hidden="true"><use href="#i-brain"/></svg>PILLAR 3 • PSYCHOLOGY</span>
+            <h3 class="h-card h-card--ink"><a href="#">Market Psychology &amp; Behavioral Biases: Conquering FOMO and Loss Aversion</a></h3>
+            <p class="dek dek--loose">Understanding cognitive heuristic traps in volatile order books: why herd mentality causes retail distribution at cycle peaks and panic liquidations at cycle troughs.</p>
+          </div>
+          <a class="pillar-link" href="#">Explore Behavioral Finance <svg class="svg-ic" width="13" height="9" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         10. LATEST FINANCIAL NEWS
+         =================================================== -->
+    <section class="section" id="latest" aria-labelledby="latest-h">
+      <div class="sec-head" style="padding-bottom:14px">
+        <div class="sec-title" style="--bar:var(--ink)"><h2 id="latest-h">LATEST FINANCIAL NEWS</h2></div>
+        <div class="chips" role="group" aria-label="Filter news by category">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-filter="markets" aria-pressed="false">Markets</button>
+          <button class="chip" type="button" data-filter="corporate" aria-pressed="false">Corporate</button>
+          <button class="chip" type="button" data-filter="economy" aria-pressed="false">Economy</button>
+          <button class="chip" type="button" data-filter="tech" aria-pressed="false">Tech</button>
+          <button class="chip" type="button" data-filter="policy" aria-pressed="false">Policy</button>
+        </div>
+      </div>
+      <div class="stream" id="newsStream" aria-live="polite">
+        <article class="news-item" data-category="corporate tech">
+          <div class="news-item__body">
+            <div class="news-item__meta"><span class="tag tag--ink">CORPORATE</span><time>18 minutes ago</time><span class="dot" aria-hidden="true">•</span><span>Earnings Desk</span></div>
+            <h3><a href="#">Alphabet Cloud Unit Surpasses $10 Billion Run Rate on Accelerated AI Compute Engagements</a></h3>
+            <p class="dek">Quarterly earnings metrics highlight enterprise adoption across vertex generative tools, outperforming consensus forecasts.</p>
+          </div>
+          <div class="news-thumb"><div class="media" data-label="">
+            <svg class="media__art" role="img" aria-label="Illustration of a corporate skyline" preserveAspectRatio="xMidYMid slice"><use href="#art-corp"/></svg></div></div>
+        </article>
+        <article class="news-item" data-category="policy economy">
+          <div class="news-item__body">
+            <div class="news-item__meta"><span class="tag tag--blue">POLICY</span><time>42 minutes ago</time><span class="dot" aria-hidden="true">•</span><span>Washington Bureau</span></div>
+            <h3><a href="#">US Treasury Announces Refunding Schedule: Issuance Tilt Favors Shorter Tenors</a></h3>
+            <p class="dek">Borrowing advisory committee confirms steady auction sizing across 2-year and 5-year paper to minimize long-dated yield volatility.</p>
+          </div>
+          <div class="news-thumb"><div class="media" data-label="">
+            <svg class="media__art" role="img" aria-label="Illustration of a government treasury building" preserveAspectRatio="xMidYMid slice"><use href="#art-treasury"/></svg></div></div>
+        </article>
+        <article class="news-item" data-category="markets economy">
+          <div class="news-item__body">
+            <div class="news-item__meta"><span class="tag tag--orange">MARKETS</span><time>1 hour ago</time><span class="dot" aria-hidden="true">•</span><span>Equities Floor</span></div>
+            <h3><a href="#">Sovereign Wealth Funds Increase Allocation to Southeast Asian Infrastructure Assets</a></h3>
+            <p class="dek">Cross-border equity consortiums announce major multi-billion dollar stakes in Singapore and Indonesian telecom networks.</p>
+          </div>
+          <div class="news-thumb"><div class="media" data-label="">
+            <svg class="media__art" role="img" aria-label="Illustration of a global network" preserveAspectRatio="xMidYMid slice"><use href="#art-network"/></svg></div></div>
+        </article>
+        <p class="stream-empty" id="streamEmpty" hidden>No stories in this category yet.</p>
+      </div>
+      <div class="load-more">
+        <button class="btn-outline" type="button" id="loadMoreBtn">LOAD MORE FINANCIAL STORIES
+          <svg class="svg-ic" width="8" height="5" aria-hidden="true"><use href="#i-chev"/></svg></button>
+        <p class="load-note" id="loadMoreNote" aria-live="polite"></p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================================================
+       11. NEWSLETTER (Name, Email, Phone only)
+       =================================================== -->
+  <section class="newsletter" id="newsletter" aria-labelledby="nl-h">
+    <div class="newsletter__inner">
+      <div>
+        <p class="newsletter__eyebrow"><svg class="svg-ic" width="15" height="12" aria-hidden="true"><use href="#i-mail"/></svg>MORNING BRIEFING DIRECTIVE</p>
+        <h2 id="nl-h">Stay Informed.<br>Understand the Markets.</h2>
+        <p class="newsletter__copy">Receive financial headlines, market developments, and educational insights directly in your inbox every morning before market opening.</p>
+        <p class="newsletter__fine">No spam. Unsubscribe anytime. View our <a href="#">Privacy Policy</a>.</p>
+      </div>
+
+      <form class="nl-form" id="newsletterForm" novalidate>
+        <div class="field">
+          <label for="nl-name">Name</label>
+          <input id="nl-name" name="name" type="text" autocomplete="name" placeholder="Your full name" required maxlength="100" aria-describedby="nl-name-err">
+          <p class="field__error" id="nl-name-err"></p>
+        </div>
+        <div class="field">
+          <label for="nl-email">Email</label>
+          <input id="nl-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="Enter your email address..." required maxlength="254" aria-describedby="nl-email-err">
+          <p class="field__error" id="nl-email-err"></p>
+        </div>
+        <div class="field">
+          <label for="nl-phone">Phone</label>
+          <input id="nl-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+91 98765 43210" required maxlength="20" aria-describedby="nl-phone-err">
+          <p class="field__error" id="nl-phone-err"></p>
+        </div>
+        <button class="nl-submit" type="submit" id="nlSubmit"><span class="spinner" aria-hidden="true"></span><span class="nl-submit__label">SUBSCRIBE FREE</span></button>
+        <p class="nl-status" id="nlStatus" role="status" aria-live="polite"></p>
+        <p class="nl-privacy">We only use these details to send the GMN newsletter.</p>
+      </form>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- ===================================================
+         12. EDITORIAL PLEDGE
+         =================================================== -->
+    <section class="section" id="pledge" aria-labelledby="pledge-h">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--ink)"><h2 id="pledge-h">THE GMN EDITORIAL PLEDGE</h2></div>
+        <span class="sec-meta sec-meta--caps">INDEPENDENT REPOSITORY</span>
+      </div>
+      <div class="grid-4 pledge" style="margin-top:24px">
+        <div class="card card--tint">
+          <span class="pledge__icon" aria-hidden="true"><svg class="svg-ic" width="17" height="15"><use href="#i-verify"/></svg></span>
+          <h3>Sourced &amp; Verified Data</h3>
+          <p class="dek dek--loose">Independent cross-verification of regulatory filings, central bank disclosures, and continuous interbank transaction records.</p>
+        </div>
+        <div class="card card--tint">
+          <span class="pledge__icon" aria-hidden="true"><svg class="svg-ic" width="17" height="16"><use href="#i-balance"/></svg></span>
+          <h3>Uncompromising Objectivity</h3>
+          <p class="dek dek--loose">Strict organizational separation between commercial sponsors, advertising inventory, and newsroom editorial reporting.</p>
+        </div>
+        <div class="card card--tint">
+          <span class="pledge__icon" aria-hidden="true"><svg class="svg-ic" width="19" height="15"><use href="#i-cap"/></svg></span>
+          <h3>Financial Education for All</h3>
+          <p class="dek dek--loose">Translating complex financial derivatives and structural balance sheets into actionable, accessible language for all readers.</p>
+        </div>
+        <div class="card card--tint">
+          <span class="pledge__icon" aria-hidden="true"><svg class="svg-ic" width="17" height="17"><use href="#i-globe"/></svg></span>
+          <h3>Global &amp; Regional Depth</h3>
+          <p class="dek dek--loose">Dual, high-fidelity reporting covering mature Western capital exchanges alongside high-velocity developing market powerhouses.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         13. FAQ
+         =================================================== -->
+    <section class="section" id="faq" aria-labelledby="faq-h" style="padding-bottom:24px">
+      <div class="sec-head">
+        <div class="sec-title" style="--bar:var(--orange)"><h2 id="faq-h">FREQUENTLY ASKED QUESTIONS</h2></div>
+        <span class="sec-meta" style="font-size:12px;text-transform:uppercase">READER RESOURCE</span>
+      </div>
+      <div class="faq">
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a1" id="faq-q1">1. What is Global Markets Nexus?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a1" role="region" aria-labelledby="faq-q1" hidden><p>Global Markets Nexus (GMN) is a financial news and education website. It covers market developments, economic news, and investing concepts across major global markets, written to be clear for both new and experienced readers.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a2" id="faq-q2">2. Which markets does the website cover?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a2" role="region" aria-labelledby="faq-q2" hidden><p>GMN covers India and US equities, forex, digital assets, commodities, the global economy, mutual funds, and personal finance, along with trading and investing education.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a3" id="faq-q3">3. Can I find Indian and US market news?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a3" role="region" aria-labelledby="faq-q3" hidden><p>Yes. The <a href="#india">India Markets</a> section follows Dalal Street, and the <a href="#us">US Markets &amp; Wall Street</a> section follows US equities, monetary policy, and debt markets.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a4" id="faq-q4">4. Does the website cover forex and crypto?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a4" role="region" aria-labelledby="faq-q4" hidden><p>Yes. See <a href="#forex">Forex &amp; Global Currency Nexus</a> for currency analysis and the economic calendar, and <a href="#crypto">Digital Assets &amp; Blockchain</a> for crypto and regulation coverage.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a5" id="faq-q5">5. Can beginners learn about investing?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a5" role="region" aria-labelledby="faq-q5" hidden><p>Yes. The <a href="#investing">Investing &amp; Wealth Management</a> guides and the <a href="#education">Trading &amp; Market Education</a> pillars explain core ideas such as compounding, asset allocation, risk management, and market psychology step by step.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a6" id="faq-q6">6. How can I subscribe to updates?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a6" role="region" aria-labelledby="faq-q6" hidden><p>Use the <a href="#newsletter">newsletter form</a>: enter your name, email, and phone number and select Subscribe Free.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a7" id="faq-q7">7. Does the website provide personalized financial advice?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a7" role="region" aria-labelledby="faq-q7" hidden><p>No. All content is for informational and educational purposes only and is not personalized investment advice. Consider speaking with a licensed financial adviser before making investment decisions.</p></div>
+        </div>
+        <div class="faq__item">
+          <h3><button class="faq__q" type="button" aria-expanded="false" aria-controls="faq-a8" id="faq-q8">8. How can I contact the editorial team?<svg class="svg-ic" width="10" height="6" aria-hidden="true"><use href="#i-chev"/></svg></button></h3>
+          <div class="faq__a" id="faq-a8" role="region" aria-labelledby="faq-q8" hidden><p>Use the <strong>Press &amp; Inquiries</strong> link in the footer to reach the editorial team.</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="#top" aria-label="Global Markets Nexus — back to top">
+          <svg class="brand__logo" viewBox="0 0 128 32" role="img" aria-label="GMN logo"><use href="#art-logo"/></svg>
+          <span class="brand__name">GLOBAL MARKETS NEXUS</span>
+        </a>
+        <p>The authoritative journal of global macroeconomics, institutional investing, and cross-asset market intelligence. Serving fund managers, analysts, and enterprise leadership worldwide.</p>
+        <div class="terminals"><span>TERMINALS:</span><span class="pill">GMN-INTL 24.8</span><span class="pill">FEED: SAMPLE</span></div>
+      </div>
+      <div class="footer-col">
+        <h4>MARKETS &amp; ASSETS</h4>
+        <ul>
+          <li><a href="#india">India Markets</a></li>
+          <li><a href="#us">US Equities</a></li>
+          <li><a href="#forex">Currencies &amp; FX</a></li>
+          <li><a href="#economy">Energy &amp; Metals</a></li>
+          <li><a href="#crypto">Digital Assets</a></li>
+          <li><a href="#us">Sovereign Bonds</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>ANALYSIS &amp; FUNDS</h4>
+        <ul>
+          <li><a href="#investing">Mutual Funds</a></li>
+          <li><a href="#economy">Global Macro</a></li>
+          <li><a href="#investing">Wealth Advisory</a></li>
+          <li><a href="#education">Quant Research</a></li>
+          <li><a href="#forex">Central Bank Watch</a></li>
+          <li><a href="#us">Corporate Earnings</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>COMPANY &amp; GOVERNANCE</h4>
+        <ul>
+          <li><a href="#pledge">Editorial Board</a></li>
+          <li><a href="#pledge">Editorial Standards</a></li>
+          <li><a href="#disclaimer">Financial Disclaimer</a></li>
+          <li><a href="#newsletter">Market Newsletters</a></li>
+          <li><a href="#">Enterprise Terminal</a></li>
+          <li><a href="#">Press &amp; Inquiries</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-disclosure"><strong>Financial Disclosure:</strong> Market quotations and historical data are sourced from global exchanges with standard broadcast latency. Information published by Global Markets Nexus is intended solely for institutional educational and analytical evaluation and does not constitute fiduciary investment counsel, portfolio recommendations, or solicitations to buy or sell securities.</p>
+    <div class="footer-bottom">
+      <p>© <span id="copyYear">2025</span> Global Markets Nexus Media Corp. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="#">Privacy Policy</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#">Terms of Service</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#">Security Protocols</a><span class="sep" aria-hidden="true">•</span>
+        <a href="#">RSS Feeds</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   CONFIGURATION
+   ========================================================= */
+// Deployed Google Apps Script web app URL (provided by you).
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmHTDXtDLJUSZzJCBuMIGnf8RyO1ammlXQGmqtdjSyJkre7MQiksR35Zns6qdJsl2y/exec";
+
+/* =========================================================
+   SMALL HELPERS
+   ========================================================= */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+function safeStorageGet(key) {
+  try { return window.sessionStorage.getItem(key); } catch (e) { return null; }
+}
+function safeStorageSet(key, value) {
+  try { window.sessionStorage.setItem(key, value); } catch (e) { /* storage unavailable: ignore */ }
+}
+
+/* =========================================================
+   HEADER: today's date + copyright year
+   ========================================================= */
+(function setDates() {
+  const now = new Date();
+  const dateEl = $("#todayDate");
+  if (dateEl) {
+    dateEl.textContent = now.toLocaleDateString("en-US", {
+      weekday: "long", month: "long", day: "numeric", year: "numeric"
+    }).toUpperCase();
+  }
+  const yearEl = $("#copyYear");
+  if (yearEl) yearEl.textContent = String(now.getFullYear());
+})();
+
+/* =========================================================
+   MOBILE MENU + "MORE" DROPDOWN
+   ========================================================= */
+(function navigation() {
+  const toggle = $(".menu-toggle");
+  const nav = $("#primaryNav");
+  const moreBtn = $(".more-btn");
+  const moreMenu = $("#moreMenu");
+
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!open));
+      toggle.setAttribute("aria-label", open ? "Open menu" : "Close menu");
+      nav.classList.toggle("is-open", !open);
+    });
+    // Close the mobile menu after choosing a link
+    nav.addEventListener("click", (e) => {
+      if (e.target.closest("a") && window.matchMedia("(max-width: 900px)").matches) {
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open menu");
+        nav.classList.remove("is-open");
+      }
+    });
+  }
+
+  if (moreBtn && moreMenu) {
+    moreBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = moreBtn.getAttribute("aria-expanded") === "true";
+      moreBtn.setAttribute("aria-expanded", String(!open));
+      moreMenu.classList.toggle("is-open", !open);
+    });
+    document.addEventListener("click", (e) => {
+      if (!moreMenu.contains(e.target)) {
+        moreBtn.setAttribute("aria-expanded", "false");
+        moreMenu.classList.remove("is-open");
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        moreBtn.setAttribute("aria-expanded", "false");
+        moreMenu.classList.remove("is-open");
+      }
+    });
+  }
+})();
+
+/* =========================================================
+   IN-PAGE LINKS
+   Scrolls to sections without changing the URL. This avoids the
+   Chrome "Unsafe attempt to load URL file://…#section" warning when
+   the page is opened directly from disk, and works the same online.
+   ========================================================= */
+(function inPageLinks() {
+  function scrollToTarget(hash) {
+    if (!hash || hash === "#") return false;
+    const target = hash === "#top" ? document.body : document.getElementById(hash.slice(1));
+    if (!target) return false;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    if (target !== document.body) {
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }
+    return true;
+  }
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest('a[href^="#"], [data-scroll-to]');
+    if (!trigger) return;
+    const hash = trigger.getAttribute("data-scroll-to") || trigger.getAttribute("href");
+    if (hash === "#") { e.preventDefault(); return; }   // placeholder links: do nothing
+    if (scrollToTarget(hash)) e.preventDefault();
+  });
+})();
+
+/* =========================================================
+   MARKET WATCH TABS (sample values from the design)
+   ========================================================= */
+(function marketWatch() {
+  const data = {
+    indices: [
+      ["S&P 500", "5,864.67", "+0.41%"], ["NASDAQ 100", "20,385.12", "+0.55%"],
+      ["NIFTY 50", "24,852.15", "+0.58%"], ["FTSE 100", "8,245.30", "-0.14%"],
+      ["NIKKEI 225", "38,981.75", "+0.11%"]
+    ],
+    forex: [
+      ["EUR/USD", "1.0825", "+0.17%"], ["GBP/USD", "1.2980", "+0.24%"],
+      ["USD/JPY", "152.44", "-0.21%"], ["USD/INR", "84.08", "-0.04%"],
+      ["AUD/USD", "0.6650", "+0.12%"]
+    ],
+    commodity: [
+      ["Gold (oz)", "$2,735.40", "+0.47%"], ["Silver (oz)", "$33.80", "+1.20%"],
+      ["Brent Crude", "$74.29", "-1.17%"], ["Natural Gas", "$2.52", "+2.10%"],
+      ["Copper (lb)", "$4.35", "+0.65%"]
+    ]
+  };
+  const panel = $("#watchPanel");
+  const tabs = $$(".watch__tab");
+  if (!panel || !tabs.length) return;
+
+  function render(set) {
+    panel.innerHTML = "";
+    data[set].forEach(([name, price, change]) => {
+      const row = document.createElement("div");
+      row.className = "watch__row";
+      const b = document.createElement("b");
+      b.textContent = name;
+      const span = document.createElement("span");
+      span.textContent = price + " ";
+      const em = document.createElement("em");
+      em.className = change.startsWith("-") ? "down" : "up";
+      em.textContent = change;
+      span.appendChild(em);
+      row.append(b, span);
+      panel.appendChild(row);
+    });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+      render(tab.dataset.set);
+    });
+  });
+})();
+
+/* =========================================================
+   LATEST NEWS: category filter + load more
+   ========================================================= */
+(function newsFilter() {
+  const chips = $$(".chip");
+  const items = $$(".news-item");
+  const empty = $("#streamEmpty");
+
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const filter = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+      let shown = 0;
+      items.forEach((item) => {
+        const cats = (item.dataset.category || "").split(" ");
+        const match = filter === "all" || cats.includes(filter);
+        item.hidden = !match;
+        if (match) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+  });
+
+  const loadBtn = $("#loadMoreBtn");
+  const note = $("#loadMoreNote");
+  if (loadBtn && note) {
+    loadBtn.addEventListener("click", () => {
+      note.textContent = "More stories will appear here once the news feed is connected.";
+    });
+  }
+})();
+
+/* =========================================================
+   SHARE BUTTON (uses the device share sheet when available)
+   ========================================================= */
+(function share() {
+  const btn = $("#shareBtn");
+  if (!btn) return;
+  btn.addEventListener("click", async () => {
+    const shareData = { title: document.title, url: location.href };
+    try {
+      if (navigator.share) { await navigator.share(shareData); return; }
+      if (navigator.clipboard) { await navigator.clipboard.writeText(location.href); btn.setAttribute("aria-label", "Link copied"); }
+    } catch (e) { /* user cancelled or not allowed: nothing to do */ }
+  });
+})();
+
+/* =========================================================
+   FAQ ACCORDION
+   ========================================================= */
+(function faq() {
+  $$(".faq__q").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const panel = document.getElementById(btn.getAttribute("aria-controls"));
+      const open = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!open));
+      if (panel) panel.hidden = open;
+    });
+  });
+})();
+
+/* =========================================================
+   NEWSLETTER FORM → Google Apps Script → Google Sheets
+   ---------------------------------------------------------
+   Uses a no-cors GET request so it also works when this page is
+   opened directly from disk (file://).
+
+   IMPORTANT LIMITATION: with mode "no-cors" the browser cannot read
+   the server's reply. A resolved fetch only means the request was
+   SENT — not that the row was saved. The success message is worded
+   accordingly. GET query strings can appear in browser history and
+   server logs, so only name, email and phone are sent.
+   ========================================================= */
+(function newsletter() {
+  const form = $("#newsletterForm");
+  if (!form) return;
+
+  const nameInput = $("#nl-name");
+  const emailInput = $("#nl-email");
+  const phoneInput = $("#nl-phone");
+  const submitBtn = $("#nlSubmit");
+  const submitLabel = $(".nl-submit__label", submitBtn);
+  const statusEl = $("#nlStatus");
+
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const PHONE_RE = /^\+?\d{7,15}$/;
+  const SENT_KEY = "gmn_newsletter_sent_email";
+  let isSubmitting = false;
+  let cooldownUntil = 0;
+
+  function setStatus(type, message) {
+    statusEl.className = "nl-status" + (type ? " is-" + type : "");
+    statusEl.textContent = message || "";
+  }
+
+  function setFieldError(input, message) {
+    const errorEl = document.getElementById(input.getAttribute("aria-describedby"));
+    if (message) {
+      input.setAttribute("aria-invalid", "true");
+      if (errorEl) errorEl.textContent = message;
+    } else {
+      input.removeAttribute("aria-invalid");
+      if (errorEl) errorEl.textContent = "";
+    }
+  }
+
+  function normalisePhone(value) {
+    return value.replace(/[\s\-().]/g, "");
+  }
+
+  function validate() {
+    const name = nameInput.value.trim().replace(/\s+/g, " ");
+    const email = emailInput.value.trim().toLowerCase();
+    const phone = normalisePhone(phoneInput.value.trim());
+    let firstInvalid = null;
+
+    if (!name) { setFieldError(nameInput, "Please enter your name."); firstInvalid = firstInvalid || nameInput; }
+    else if (name.length > 100) { setFieldError(nameInput, "Name must be 100 characters or fewer."); firstInvalid = firstInvalid || nameInput; }
+    else setFieldError(nameInput, "");
+
+    if (!email) { setFieldError(emailInput, "Please enter your email address."); firstInvalid = firstInvalid || emailInput; }
+    else if (!EMAIL_RE.test(email)) { setFieldError(emailInput, "Please enter a valid email address (for example, name@example.com)."); firstInvalid = firstInvalid || emailInput; }
+    else setFieldError(emailInput, "");
+
+    if (!phone) { setFieldError(phoneInput, "Please enter your phone number."); firstInvalid = firstInvalid || phoneInput; }
+    else if (!PHONE_RE.test(phone)) { setFieldError(phoneInput, "Please enter 7–15 digits, with an optional + country code."); firstInvalid = firstInvalid || phoneInput; }
+    else setFieldError(phoneInput, "");
+
+    return { valid: !firstInvalid, firstInvalid, values: { name, email, phone } };
+  }
+
+  function setLoading(loading) {
+    isSubmitting = loading;
+    submitBtn.disabled = loading;
+    submitBtn.classList.toggle("is-loading", loading);
+    submitBtn.setAttribute("aria-busy", String(loading));
+    submitLabel.textContent = loading ? "SENDING…" : "SUBSCRIBE FREE";
+  }
+
+  // Clear a field's error as soon as the reader fixes it
+  [nameInput, emailInput, phoneInput].forEach((input) => {
+    input.addEventListener("input", () => {
+      if (input.getAttribute("aria-invalid") === "true") setFieldError(input, "");
+    });
+  });
+
+  function showSuccess(name) {
+    setStatus("success",
+      "Thanks" + (name ? ", " + name.split(" ")[0] : "") +
+      "! Your subscription request has been sent. If your first briefing doesn't arrive, please try again later.");
+  }
+
+  function showError() {
+    setStatus("error",
+      "We couldn't send your request. Please check your internet connection and try again.");
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (isSubmitting) return;               // ignore double clicks while sending
+    if (Date.now() < cooldownUntil) return; // ignore stray clicks right after a successful send
+    setStatus("", "");
+
+    const { valid, firstInvalid, values } = validate();
+    if (!valid) {
+      setStatus("error", "Please fix the highlighted fields.");
+      firstInvalid.focus();
+      return;
+    }
+
+    // Avoid accidental repeat submissions from the same browser session.
+    // (The Apps Script backend also skips emails that are already in the sheet.)
+    if (safeStorageGet(SENT_KEY) === values.email) {
+      setStatus("info", "You've already sent a request with this email address.");
+      return;
+    }
+
+    if (!SCRIPT_URL || SCRIPT_URL.indexOf("script.google.com") === -1) {
+      setStatus("error", "The newsletter isn't connected yet. Please try again later.");
+      return;
+    }
+
+    setLoading(true);
+
+    const { name, email, phone } = values;
+    const params = new URLSearchParams({
+      name,
+      email,
+      phone
+    });
+
+    const url = SCRIPT_URL + "?" + params.toString();
+
+    fetch(url, {
+      method: "GET",
+      mode: "no-cors"
+    })
+    .then(() => {
+      safeStorageSet(SENT_KEY, email);
+      cooldownUntil = Date.now() + 3000;
+      form.reset();
+      showSuccess(name);
+    })
+    .catch(() => showError())
+    .finally(() => setLoading(false));
+  });
+})();
+</script>
+</body>
+</html>
