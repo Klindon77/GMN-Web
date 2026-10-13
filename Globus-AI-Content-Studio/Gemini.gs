@@ -65,7 +65,7 @@ function geminiRequest_(method, path, bodyObj) {
     last = explainGeminiError_(code, text);
     var retryable = (code === 429 || code === 500 || code === 503);
     if (!retryable || i === attempts) { var err = new Error(last); err.httpCode = code; err.rawDetail = scrub_(rawGeminiDetail_(text)); throw err; }
-    Utilities.sleep(2000 * Math.pow(2, i - 1)); // 2s, 4s
+    Utilities.sleep(3000 * Math.pow(2, i - 1)); // 3s, 6s, 12s, 24s
   }
   throw new Error(last);
 }
