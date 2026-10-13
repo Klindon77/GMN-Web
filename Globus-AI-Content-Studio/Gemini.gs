@@ -102,7 +102,7 @@ function testGeminiConnection() {
     lines.push('PASS  API key found in Script Properties.');
     var models = listGeminiModels_();
     lines.push('PASS  Key accepted. ' + models.length + ' models support text generation.');
-    var flash = models.filter(function (m) { return /flash/.test(m); }).slice(0, 8);
+    var flash = models.filter(function (m) { return /flash/.test(m); }).slice(0, 20);
     lines.push('INFO  Some Flash models: ' + (flash.join(', ') || 'none found'));
     if (models.indexOf(model) === -1) {
       ok = false;

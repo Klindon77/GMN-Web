@@ -21,7 +21,7 @@ var CFG = {
   ],
   LOG_SHEET_NAME: 'Logs',
   LOG_HEADERS: ['Time', 'Level', 'Function', 'Row', 'Message'],
-  GEMINI_DEFAULT_MODEL: 'gemini-2.5-flash', // override with Script Property GEMINI_MODEL
+  GEMINI_DEFAULT_MODEL: 'gemini-flash-latest', // override with Script Property GEMINI_MODEL
   GEMINI_MAX_ATTEMPTS: 3,                   // retries for 429/500/503
   GEMINI_MAX_OUTPUT_TOKENS: 12000,
   ARTICLE_MIN_WORDS: 600,
