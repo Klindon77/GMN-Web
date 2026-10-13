@@ -83,3 +83,10 @@ Menu: **Test Research (Google Search)** checks whether this works on your free k
 If quota errors appear, set `USE_GROUNDING: false` in `Config.gs` (articles still work, without current figures).
 
 Still your job: read the article, open the sources, confirm every number before publishing. The tool cannot guarantee accuracy.
+
+## Phase 4 update — what really happened on a free key
+`Test Research (Google Search)` returned **429 quota** on a free key. So `USE_GROUNDING` is now **false by default**.
+Without live research the tool:
+- writes **no current figures**; where one would normally appear it leaves an editor placeholder `[[ADD latest repo rate from RBI]]` (you fill it from the official source);
+- **refuses** topics that need live data (today's stock lists, prices, upper-circuit lists) instead of inventing them;
+- warns `FILL BEFORE PUBLISHING` in the Article cell note while placeholders remain.

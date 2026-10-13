@@ -30,7 +30,7 @@ function buildArticlePrompt_(topic, brief) {
     'Rules for the brief: you may quote a figure only if it appears above, and you must name its source and the date/period it refers to in the sentence (e.g. "according to RBI, as of ..."). Skip anything marked NOT FOUND. Everything else must stay qualitative.'
   ] : [
     '',
-    'NO RESEARCH BRIEF IS AVAILABLE: do not state any specific current figure at all. Stay qualitative and tell readers where to check the latest numbers.'
+    'NO RESEARCH BRIEF IS AVAILABLE: do not state any specific current figure at all. Where a latest figure would normally be quoted (a policy rate, an inflation reading, an index level), write an editor placeholder exactly like [[ADD latest repo rate from RBI]] (at most 5 placeholders, each naming the figure and the official source). Everywhere else stay qualitative.'
   ];
   return [
     'You are an editor for "Globus Market Nexus", a financial education and market-analysis blog read mainly by retail investors in India and globally.',
@@ -93,6 +93,9 @@ function validateArticle_(a) {
   if (/<\s*(script|iframe|style|object|embed)/i.test(a.articleHtml) || /\son\w+\s*=/i.test(a.articleHtml)) {
     errors.push('Article contains disallowed HTML (script/iframe/style or event handlers).');
   }
+  var ph = (a.articleHtml.split(CFG.PLACEHOLDER_MARK).length - 1);
+  if (ph > CFG.MAX_PLACEHOLDERS) errors.push('Too many editor placeholders (' + ph + ').');
+  if (ph > 0) warnings.push('FILL BEFORE PUBLISHING: ' + ph + ' placeholder(s) marked ' + CFG.PLACEHOLDER_MARK + ' ... ]] need a real figure from an official source.');
   if (/<h1[\s>]/i.test(a.articleHtml)) warnings.push('Article contains an <h1>; Blogger already uses the post title as the main heading.');
   if (/\d+(\.\d+)?\s*%/.test(a.articleHtml)) warnings.push('Article contains percentage figures. Verify every number against an official source.');
   a.sources.forEach(function (s, i) {
@@ -145,6 +148,9 @@ function generateArticleForRow_(sheet, row) {
       if (!research.ok) {
         extraNotes.push('NO LIVE DATA: ' + (CFG.USE_GROUNDING ? 'research step failed (' + research.error + ')' : 'research is switched off') + '. Article has no current figures - add them yourself from official sources.');
         if (CFG.USE_GROUNDING) logEvent_('WARN', 'generateArticleForRow_', row, 'Research failed: ' + research.error);
+      }
+      if (!research.ok && new RegExp(CFG.REALTIME_TOPIC_REGEX, 'i').test(topic)) {
+        throw new Error('This topic needs live market data (prices, stock lists, today\'s moves) and no verified data source is connected, so the tool refuses to write it (it would have to invent names or numbers). Rewrite it as an educational topic, e.g. "What is an upper circuit and how does it work?", then set Status back to TOPIC.');
       }
       var body = {
         contents: [{ parts: [{ text: buildArticlePrompt_(topic, research.ok ? research.brief : '') }] }],
