@@ -117,6 +117,8 @@ function setupContentStudio() {
     report.push('Sheet already has data, so no sample topic was added.');
   }
 
+  if (ensureLogSheet_()) report.push('Created worksheet "' + CFG.LOG_SHEET_NAME + '" for error logs.');
+
   notify_('Setup complete', report.join('\n'));
   return { ok: true, report: report };
 }

@@ -6,12 +6,15 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Globus AI Studio')
     .addItem('Setup Content Studio', 'setupContentStudio')
+    .addItem('Set Gemini API Key', 'setGeminiApiKey')
     .addItem('Test Connections', 'testConnections')
+    .addItem('Generate Article', 'generateArticleForSelectedRow')
     .addToUi();
 }
 
 /** Runs every connection test that exists so far. */
 function testConnections() {
   testSheetsConnection();
-  // Phase 3 will add testGeminiConnection(); Phase 6 testBloggerConnection().
+  testGeminiConnection();
+  // Phase 6 will add testBloggerConnection().
 }
