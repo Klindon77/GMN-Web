@@ -86,6 +86,28 @@ function geminiGenerateText_(requestBody, model) {
   return cand.content.parts.map(function (p) { return p.text || ''; }).join('');
 }
 
+/** Name of the model that actually answered the last article call (for logs). */
+var lastModelUsed_ = '';
+
+/**
+ * Tries the main model; if it is overloaded / over quota / unavailable even after
+ * retries, tries the fallback model once. Keeps the real error if both fail.
+ */
+function geminiGenerateWithFallback_(requestBody) {
+  var main = getGeminiModel_();
+  var fb = PropertiesService.getScriptProperties().getProperty('GEMINI_FALLBACK_MODEL') || CFG.GEMINI_FALLBACK_MODEL;
+  try {
+    lastModelUsed_ = main;
+    return geminiGenerateText_(requestBody, main);
+  } catch (e) {
+    var swappable = [404, 429, 500, 503].indexOf(e.httpCode) !== -1;
+    if (!swappable || !fb || fb === main) throw e;
+    logEvent_('WARN', 'geminiGenerateWithFallback_', '', 'Main model "' + main + '" failed (' + e.httpCode + '). Trying fallback "' + fb + '".');
+    lastModelUsed_ = fb;
+    return geminiGenerateText_(requestBody, fb);
+  }
+}
+
 /** Lists models this key can use for generateContent. */
 function listGeminiModels_() {
   var data = geminiRequest_('get', '/models?pageSize=200');

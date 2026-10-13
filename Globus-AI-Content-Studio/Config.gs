@@ -22,9 +22,10 @@ var CFG = {
   LOG_SHEET_NAME: 'Logs',
   LOG_HEADERS: ['Time', 'Level', 'Function', 'Row', 'Message'],
   GEMINI_DEFAULT_MODEL: 'gemini-flash-latest', // override with Script Property GEMINI_MODEL
+  GEMINI_FALLBACK_MODEL: 'gemini-flash-lite-latest', // used if the main model stays overloaded (Script Property GEMINI_FALLBACK_MODEL overrides)
   GEMINI_MAX_ATTEMPTS: 5,                   // retries for 429/500/503 (waits 3s, 6s, 12s, 24s)
   GEMINI_MAX_OUTPUT_TOKENS: 12000,
-  ARTICLE_MIN_WORDS: 600,
+  ARTICLE_MIN_WORDS: 1000,
   SAMPLE_TOPIC: 'How Inflation Affects the Indian Stock Market'
 };
 

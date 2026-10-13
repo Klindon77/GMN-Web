@@ -34,10 +34,14 @@ function buildArticlePrompt_(topic) {
     '- Sources: list ONLY well-known official or reputable organisations and give their main website address (for example the central bank, market regulator, stock exchange, statistics office). Do NOT make up deep links to specific pages or reports.',
     '- In "claimsToVerify" list every statement a human editor should fact-check before publishing.',
     '- Avoid filler and repetition. Original wording.',
+    '- Write like an experienced finance writer explaining to an intelligent friend: varied sentence length, concrete everyday examples (clearly labelled as hypothetical, e.g. "Suppose an investor holds..."), short paragraphs, plain words, no hype.',
+    '- Do NOT invent personal experience, anecdotes about yourself, credentials, interviews, or quotes. Never write "in my 10 years of trading" or similar.',
+    '- Avoid stock AI phrases such as "in today\'s fast-paced world", "delve", "it is important to note", "unlock", "navigating the landscape", "in conclusion".',
+    '- Include a short "Key takeaways" bullet list near the end, and a practical "Common mistakes" section where it fits the topic.',
     '',
     'ARTICLE STRUCTURE (HTML for a blog post body, no <html>/<body>/<h1>):',
     '- An introduction paragraph, then 4 to 6 sections each starting with an <h2> heading (use <h3> sparingly), using <p>, <ul>, <li>, <strong>.',
-    '- A final <h2>Conclusion</h2> section. Target 900 to 1300 words.',
+    '- A final <h2>Conclusion</h2> section. Target 1200 to 1500 words (never fewer than 1100).',
     '- Do not include a sources list or a disclaimer inside articleHtml; those are added automatically.',
     '',
     'Also return: seoTitle (max 60 characters), metaDescription (max 155 characters), keywords (5 to 10 short phrases), sources, claimsToVerify.',
@@ -138,12 +142,12 @@ function generateArticleForRow_(sheet, row) {
       };
       var text;
       try {
-        text = geminiGenerateText_(body);
+        text = geminiGenerateWithFallback_(body);
       } catch (e) {
         if (e.httpCode === 400 && !/api key/i.test(e.rawDetail || '')) {
           // Some models reject schemas: retry once with JSON mode only (prompt still demands the shape).
           delete body.generationConfig.responseSchema;
-          text = geminiGenerateText_(body);
+          text = geminiGenerateWithFallback_(body);
         } else { throw e; }
       }
       var article;
@@ -161,7 +165,7 @@ function generateArticleForRow_(sheet, row) {
       sheet.getRange(row, COL.KEYWORDS).setValue(article.keywords.join(', '));
       sheet.getRange(row, COL.ARTICLE).setNote(notes.length ? notes.join('\n').substring(0, 4000) : '');
       sheet.getRange(row, COL.STATUS).setValue(STATUS.REVIEW_REQUIRED);
-      logEvent_('INFO', 'generateArticleForRow_', row, 'Generated ' + countWords_(article.articleHtml) + ' words; ' + notes.length + ' review notes.');
+      logEvent_('INFO', 'generateArticleForRow_', row, 'Generated ' + countWords_(article.articleHtml) + ' words with ' + lastModelUsed_ + '; ' + notes.length + ' review notes.');
       return { ok: true, message: 'Row ' + row + ' generated (' + countWords_(article.articleHtml) + ' words). Status: REVIEW_REQUIRED. Hover the Article cell for review notes.' };
     } catch (e) {
       sheet.getRange(row, COL.STATUS).setValue(STATUS.ERROR);
