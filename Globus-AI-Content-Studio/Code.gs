@@ -13,7 +13,7 @@
  * Project Settings > Script Properties (added in later phases).
  */
 var CFG = {
-  VERSION: '2026-10-13 all-in-one v4.2',
+  VERSION: '2026-10-13 all-in-one v4.3 (writes by sections)',
   SHEET_NAME: 'Content',          // worksheet used by the studio
   HEADER_ROW: 1,
   FIRST_DATA_ROW: 2,
@@ -37,6 +37,8 @@ var CFG = {
   MAX_SOURCES_CHECKED: 8,                   // max source links tested per article
   GEMINI_MAX_ATTEMPTS: 5,                   // retries for 429/500/503 (waits 3s, 6s, 12s, 24s)
   GEMINI_MAX_OUTPUT_TOKENS: 12000,
+  WRITE_MODE: 'SECTIONS',                   // 'SECTIONS' = plan, then write each section separately (reliable length). 'SINGLE' = one call.
+  SECTION_PAUSE_MS: 1200,                   // short pause between section calls (gentle on free-tier limits)
   ARTICLE_MIN_WORDS: 1000,
   MAX_EXPAND_ATTEMPTS: 2,                   // if the draft is only too short, ask Gemini to expand it (max times)
   // Topics about a specific real person: the tool has no verified facts, so it would invent a biography. Refused.
@@ -716,6 +718,129 @@ function finalizeArticleHtml_(a) {
   return html;
 }
 
+
+/** Plan for the section-by-section writer. */
+var OUTLINE_SCHEMA = {
+  type: 'OBJECT',
+  properties: {
+    seoTitle: { type: 'STRING' },
+    metaDescription: { type: 'STRING' },
+    keywords: { type: 'ARRAY', items: { type: 'STRING' } },
+    sections: {
+      type: 'ARRAY',
+      items: { type: 'OBJECT', properties: {
+        heading: { type: 'STRING' }, points: { type: 'ARRAY', items: { type: 'STRING' } } },
+        required: ['heading', 'points'] }
+    },
+    sources: {
+      type: 'ARRAY',
+      items: { type: 'OBJECT', properties: {
+        title: { type: 'STRING' }, url: { type: 'STRING' }, note: { type: 'STRING' } },
+        required: ['title', 'url'] }
+    },
+    claimsToVerify: { type: 'ARRAY', items: { type: 'STRING' } }
+  },
+  required: ['seoTitle', 'metaDescription', 'keywords', 'sections', 'sources', 'claimsToVerify']
+};
+
+/** The editorial rules every prompt must carry. */
+function editorialRules_(brief) {
+  var lines = [
+    'EDITORIAL RULES (strict):',
+    '- Blog: "Globus Market Nexus", a financial education and market-analysis site for retail investors in India and globally.',
+    '- Clear, natural, professional English. Educational explanation and analysis only. Never give personal investment advice or tell readers to buy/sell specific securities.',
+    '- Do NOT invent statistics, prices, index levels, percentages, dates, quotes, news events or studies.',
+    '- Separate established concepts, your analysis (use "may", "can", "often"), and current data (which you cannot know).',
+    '- Write like an experienced finance writer explaining to an intelligent friend: varied sentence length, short paragraphs, plain words, concrete everyday examples clearly labelled as hypothetical ("Suppose an investor holds...").',
+    '- Do NOT invent personal experience, anecdotes about yourself, credentials, interviews or quotes.',
+    '- Avoid stock AI phrases: "in today\'s fast-paced world", "delve", "it is important to note", "unlock", "navigating the landscape", "in conclusion".'
+  ];
+  if (brief) {
+    lines.push('RESEARCH BRIEF (the ONLY source of specific figures you may use; name the source and date/period when you use one; skip anything marked NOT FOUND):');
+    lines.push(brief);
+  } else {
+    lines.push('NO RESEARCH BRIEF IS AVAILABLE: state no specific current figure. Where a latest figure would normally be quoted (a policy rate, an inflation reading, an index level) write an editor placeholder exactly like [[ADD latest repo rate from RBI]] (at most 5 placeholders in the whole article, each naming the figure and the official source). Otherwise stay qualitative.');
+  }
+  return lines;
+}
+
+/** One Gemini call that returns parsed JSON (schema first; if the model rejects the schema, again without it). */
+function callJson_(prompt, schema) {
+  var body = {
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { temperature: 0.5, maxOutputTokens: CFG.GEMINI_MAX_OUTPUT_TOKENS, responseMimeType: 'application/json', responseSchema: schema }
+  };
+  var text;
+  try {
+    text = geminiGenerateWithFallback_(body);
+  } catch (e) {
+    if (e.httpCode === 400 && !/api key/i.test(e.rawDetail || '')) {
+      delete body.generationConfig.responseSchema;
+      text = geminiGenerateWithFallback_(body);
+    } else { throw e; }
+  }
+  try { return parseModelJson_(text); }
+  catch (pe) { throw new Error('Model did not return valid JSON: ' + pe.message); }
+}
+
+/** One Gemini call that returns plain text/HTML (code fences removed). */
+function callText_(prompt) {
+  var text = geminiGenerateWithFallback_({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: { temperature: 0.6, maxOutputTokens: 4000 }
+  });
+  return String(text).trim().replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/, '').trim();
+}
+
+/**
+ * Reliable long articles: 1) plan, 2) write the introduction, 3) write each section separately.
+ * Each call is short, so Gemini cannot "shorten" the whole article. Returns the same object shape as the single-call mode.
+ */
+function writeArticleBySections_(topic, brief) {
+  var rules = editorialRules_(brief).join('\n');
+  var outline = callJson_([
+    'PLAN A BLOG ARTICLE on the topic: "' + topic + '".',
+    'Return JSON with: seoTitle (max 60 characters), metaDescription (max 155 characters), keywords (5 to 10 short phrases),',
+    'sections (exactly 6 items; the LAST one is "Conclusion and key takeaways"; each item has heading and points = 3 to 5 specific things that section must explain),',
+    'sources (ONLY well-known official or reputable organisations with their MAIN website address, never deep links) and claimsToVerify (every statement a human editor should fact-check).',
+    'Headings must be specific and useful, not generic.',
+    rules
+  ].join('\n'), OUTLINE_SCHEMA);
+  if (!outline || !Array.isArray(outline.sections) || outline.sections.length < 4) {
+    throw new Error('Planning step returned an unusable outline.');
+  }
+  var sections = outline.sections.slice(0, 8);
+  var headings = sections.map(function (x) { return String(x.heading); });
+
+  var html = callText_([
+    'WRITE THE INTRODUCTION of a blog article on: "' + topic + '".',
+    'The article will have these sections (do not write them now): ' + headings.join(' | ') + '.',
+    'Length: 130 to 170 words. Output ONLY HTML: 2 or 3 <p> paragraphs. No heading, no markdown, no code fences.',
+    rules
+  ].join('\n'));
+  if (!/^<p/i.test(html)) html = '<p>' + html.replace(/<\/?p>/gi, '') + '</p>';
+
+  sections.forEach(function (sec, i) {
+    Utilities.sleep(CFG.SECTION_PAUSE_MS);
+    var part = callText_([
+      'WRITE ONE SECTION of a blog article on: "' + topic + '".',
+      'Section heading: ' + sec.heading,
+      'This section must explain: ' + (sec.points || []).join('; ') + '.',
+      'Other sections in the article (do not repeat their content): ' + headings.filter(function (h, j) { return j !== i; }).join(' | ') + '.',
+      'Length: 220 to 300 words. Output ONLY HTML: start with <h2>' + escapeHtml_(sec.heading) + '</h2>, then <p> paragraphs and, where useful, one <ul> with <li> items.',
+      'No <h1>, no sources list, no disclaimer, no markdown, no code fences.',
+      rules
+    ].join('\n'));
+    if (!/^<h2/i.test(part)) part = '<h2>' + escapeHtml_(sec.heading) + '</h2>\n' + part;
+    html += '\n' + part;
+  });
+
+  return {
+    seoTitle: outline.seoTitle, metaDescription: outline.metaDescription, keywords: outline.keywords,
+    articleHtml: html, sources: outline.sources || [], claimsToVerify: outline.claimsToVerify || []
+  };
+}
+
 /** Generates content for one row. Returns {ok, message}. */
 function generateArticleForRow_(sheet, row) {
   var lock = LockService.getScriptLock();
@@ -749,28 +874,32 @@ function generateArticleForRow_(sheet, row) {
       if (!research.ok && new RegExp(CFG.REALTIME_TOPIC_REGEX, 'i').test(topic)) {
         throw new Error('This topic needs live market data (prices, stock lists, today\'s moves) and no verified data source is connected, so the tool refuses to write it (it would have to invent names or numbers). Rewrite it as an educational topic, e.g. "What is an upper circuit and how does it work?", then set Status back to TOPIC.');
       }
-      var body = {
-        contents: [{ parts: [{ text: buildArticlePrompt_(topic, research.ok ? research.brief : '') }] }],
-        generationConfig: {
-          temperature: 0.6,
-          maxOutputTokens: CFG.GEMINI_MAX_OUTPUT_TOKENS,
-          responseMimeType: 'application/json',
-          responseSchema: ARTICLE_SCHEMA
-        }
-      };
-      var text;
-      try {
-        text = geminiGenerateWithFallback_(body);
-      } catch (e) {
-        if (e.httpCode === 400 && !/api key/i.test(e.rawDetail || '')) {
-          // Some models reject schemas: retry once with JSON mode only (prompt still demands the shape).
-          delete body.generationConfig.responseSchema;
-          text = geminiGenerateWithFallback_(body);
-        } else { throw e; }
-      }
       var article;
-      try { article = parseModelJson_(text); }
-      catch (pe) { throw new Error('Model did not return valid JSON: ' + pe.message); }
+      if (CFG.WRITE_MODE === 'SECTIONS') {
+        article = writeArticleBySections_(topic, research.ok ? research.brief : '');
+      } else {
+        var body = {
+          contents: [{ parts: [{ text: buildArticlePrompt_(topic, research.ok ? research.brief : '') }] }],
+          generationConfig: {
+            temperature: 0.6,
+            maxOutputTokens: CFG.GEMINI_MAX_OUTPUT_TOKENS,
+            responseMimeType: 'application/json',
+            responseSchema: ARTICLE_SCHEMA
+          }
+        };
+        var text;
+        try {
+          text = geminiGenerateWithFallback_(body);
+        } catch (e) {
+          if (e.httpCode === 400 && !/api key/i.test(e.rawDetail || '')) {
+            // Some models reject schemas: retry once with JSON mode only (prompt still demands the shape).
+            delete body.generationConfig.responseSchema;
+            text = geminiGenerateWithFallback_(body);
+          } else { throw e; }
+        }
+        try { article = parseModelJson_(text); }
+        catch (pe) { throw new Error('Model did not return valid JSON: ' + pe.message); }
+      }
 
       var v = validateArticle_(article);
       var expandTries = 0;
