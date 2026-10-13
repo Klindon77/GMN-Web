@@ -1,3 +1,10 @@
+# START HERE — one file only
+Use **`Code.gs`** (everything inside). Do NOT paste the other .gs files; they are the same code split in parts, kept for reading only.
+1. Apps Script > `+` > Script > name `Code` > delete default text > paste `Code.gs` > Save.
+2. Delete every OTHER .gs file (keep `appsscript.json`).
+3. Reload the Sheet > menu Globus AI Studio > **Show Status (version check)**. It must say `Version: 2026-10-13 all-in-one v4.1`.
+
+---
 # Globus AI Content Studio — Phases 1–3
 
 Files (paste each into its own file in Apps Script, same names):

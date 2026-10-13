@@ -4,6 +4,7 @@
  * Project Settings > Script Properties (added in later phases).
  */
 var CFG = {
+  VERSION: '2026-10-13 all-in-one v4.1',
   SHEET_NAME: 'Content',          // worksheet used by the studio
   HEADER_ROW: 1,
   FIRST_DATA_ROW: 2,
