@@ -22,7 +22,16 @@ var ARTICLE_SCHEMA = {
   required: ['seoTitle', 'metaDescription', 'keywords', 'articleHtml', 'sources', 'claimsToVerify']
 };
 
-function buildArticlePrompt_(topic) {
+function buildArticlePrompt_(topic, brief) {
+  var researchBlock = brief ? [
+    '',
+    'RESEARCH BRIEF (gathered with Google Search; the ONLY source of specific figures you may use):',
+    brief,
+    'Rules for the brief: you may quote a figure only if it appears above, and you must name its source and the date/period it refers to in the sentence (e.g. "according to RBI, as of ..."). Skip anything marked NOT FOUND. Everything else must stay qualitative.'
+  ] : [
+    '',
+    'NO RESEARCH BRIEF IS AVAILABLE: do not state any specific current figure at all. Stay qualitative and tell readers where to check the latest numbers.'
+  ];
   return [
     'You are an editor for "Globus Market Nexus", a financial education and market-analysis blog read mainly by retail investors in India and globally.',
     'Write one complete article in clear, natural, professional English on this topic: "' + topic + '"',
@@ -46,7 +55,7 @@ function buildArticlePrompt_(topic) {
     '',
     'Also return: seoTitle (max 60 characters), metaDescription (max 155 characters), keywords (5 to 10 short phrases), sources, claimsToVerify.',
     'Return ONLY valid JSON matching the requested schema.'
-  ].join('\n');
+  ].concat(researchBlock).join('\n');
 }
 
 /** Pulls a JSON object out of model text (handles ```json fences). */
@@ -131,8 +140,14 @@ function generateArticleForRow_(sheet, row) {
     SpreadsheetApp.flush();
 
     try {
+      var research = CFG.USE_GROUNDING ? geminiResearch_(topic) : { ok: false, error: 'research switched off in Config.gs' };
+      var extraNotes = [];
+      if (!research.ok) {
+        extraNotes.push('NO LIVE DATA: ' + (CFG.USE_GROUNDING ? 'research step failed (' + research.error + ')' : 'research is switched off') + '. Article has no current figures - add them yourself from official sources.');
+        if (CFG.USE_GROUNDING) logEvent_('WARN', 'generateArticleForRow_', row, 'Research failed: ' + research.error);
+      }
       var body = {
-        contents: [{ parts: [{ text: buildArticlePrompt_(topic) }] }],
+        contents: [{ parts: [{ text: buildArticlePrompt_(topic, research.ok ? research.brief : '') }] }],
         generationConfig: {
           temperature: 0.6,
           maxOutputTokens: CFG.GEMINI_MAX_OUTPUT_TOKENS,
@@ -157,7 +172,10 @@ function generateArticleForRow_(sheet, row) {
       var v = validateArticle_(article);
       if (v.errors.length) throw new Error('Validation failed: ' + v.errors.join(' | '));
 
-      var notes = v.warnings.concat(article.claimsToVerify.map(function (c) { return 'VERIFY: ' + c; }));
+      // Phase 4: merge research sources, open every link, drop dead ones.
+      var verified = verifySources_((article.sources || []).concat(research.ok ? research.sources : []));
+      article.sources = verified.kept;
+      var notes = extraNotes.concat(v.warnings, verified.notes, article.claimsToVerify.map(function (c) { return 'VERIFY: ' + c; }));
       var html = finalizeArticleHtml_(article);
 
       // Write columns B-D in one go; F (keywords) and G (status). Column E (image) is untouched.

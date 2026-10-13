@@ -67,3 +67,19 @@ Check your real limits at https://aistudio.google.com/rate-limit.
 | Error 429 | Free quota reached. Wait (minutes/next day) — never enable billing without deciding to |
 | Output cut off (MAX_TOKENS) | Run again; or raise `GEMINI_MAX_OUTPUT_TOKENS` in Config.gs |
 | Row stuck on GENERATING | The run timed out. Set Status to `ERROR` or `TOPIC` by hand and retry |
+
+---
+# Phase 4 — Facts and sources
+
+New file: `Research.gs`. Changed: `Config.gs`, `Article.gs`, `Menu.gs`. (Paste all four.)
+
+What it does, in order, for each article:
+1. **Research:** asks Gemini *with Google Search* for current facts. Real pages it used come back as sources.
+2. **Write:** the article may quote a figure only if it is in that research brief, with source and date.
+3. **Link check:** every source link is opened. Dead links are removed; sites that block bots are kept and flagged.
+4. **Notes:** hover the Article cell. `NO LIVE DATA` = research failed, so the article has no current figures — add them yourself.
+
+Menu: **Test Research (Google Search)** checks whether this works on your free key.
+If quota errors appear, set `USE_GROUNDING: false` in `Config.gs` (articles still work, without current figures).
+
+Still your job: read the article, open the sources, confirm every number before publishing. The tool cannot guarantee accuracy.

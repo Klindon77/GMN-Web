@@ -8,6 +8,7 @@ function onOpen() {
     .addItem('Setup Content Studio', 'setupContentStudio')
     .addItem('Set Gemini API Key', 'setGeminiApiKey')
     .addItem('Test Connections', 'testConnections')
+    .addItem('Test Research (Google Search)', 'testResearchConnection')
     .addItem('Generate Article', 'generateArticleForSelectedRow')
     .addToUi();
 }
