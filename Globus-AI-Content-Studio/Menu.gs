@@ -1,5 +1,5 @@
 /**
- * Menu.gs — adds the "Globus AI Studio" menu when the Sheet opens.
+ * Globus AI Content Studio — Menu.gs — adds the "Globus AI Studio" menu when the Sheet opens.
  * Only items that exist and are tested are listed. More arrive in later phases.
  */
 function onOpen() {

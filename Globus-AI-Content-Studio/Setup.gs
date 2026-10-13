@@ -1,5 +1,5 @@
 /**
- * Setup.gs — Phase 1/2: creates and checks the "Content" worksheet.
+ * Globus AI Content Studio — Setup.gs — Phase 1/2: creates and checks the "Content" worksheet.
  * Safe to run many times. It never deletes or overwrites your data.
  */
 

@@ -1,5 +1,5 @@
 /**
- * Config.gs — the ONE place for shared settings and names.
+ * Globus AI Content Studio — Config.gs — the ONE place for shared settings and names.
  * Secrets (API keys) are NOT stored here. They go in
  * Project Settings > Script Properties (added in later phases).
  */
