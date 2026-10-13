@@ -13,7 +13,7 @@
  * Project Settings > Script Properties (added in later phases).
  */
 var CFG = {
-  VERSION: '2026-10-13 all-in-one v4.1',
+  VERSION: '2026-10-13 all-in-one v4.2',
   SHEET_NAME: 'Content',          // worksheet used by the studio
   HEADER_ROW: 1,
   FIRST_DATA_ROW: 2,
@@ -38,6 +38,9 @@ var CFG = {
   GEMINI_MAX_ATTEMPTS: 5,                   // retries for 429/500/503 (waits 3s, 6s, 12s, 24s)
   GEMINI_MAX_OUTPUT_TOKENS: 12000,
   ARTICLE_MIN_WORDS: 1000,
+  MAX_EXPAND_ATTEMPTS: 2,                   // if the draft is only too short, ask Gemini to expand it (max times)
+  // Topics about a specific real person: the tool has no verified facts, so it would invent a biography. Refused.
+  PERSON_TOPIC_REGEX: '(^\\s*who\\s+(is|was)\\b(?!\\s+(eligible|liable|responsible|required|entitled|exempt|allowed|affected|covered|taxed)\\b)|\\bbiography\\b|\\bnet\\s+worth\\b|\\bwiki\\b|\\bage\\s+and\\s+family\\b)',
   PLACEHOLDER_MARK: '[[ADD',                // editor placeholders left in the article for current figures
   MAX_PLACEHOLDERS: 8,
   // Topics that need LIVE market data. Without verified data the tool refuses (it would have to invent stock names/prices).
@@ -626,6 +629,32 @@ function parseModelJson_(text) {
   return JSON.parse(t);
 }
 
+/**
+ * Asks Gemini to lengthen a draft that is ONLY too short. It must not add new facts.
+ * Returns the parsed JSON of the expanded article.
+ */
+function expandArticle_(article, topic) {
+  var words = countWords_(article.articleHtml);
+  var prompt = [
+    'Below is a finished draft article (JSON) for the finance blog "Globus Market Nexus" on the topic: "' + topic + '".',
+    'It has only ' + words + ' words. Return the SAME JSON structure with articleHtml expanded to 1300-1500 words.',
+    'Expand by explaining each section in more depth, adding clearly hypothetical worked examples ("Suppose..."), a "Common mistakes" section, and a short FAQ (3 questions) as <h2>/<p>.',
+    'STRICT: do not add any new statistic, date, price, quote, news event or named study. Keep every existing [[ADD ...]] placeholder. Keep the HTML rules (no <h1>, no scripts). Do not add a sources list or disclaimer inside articleHtml.',
+    'Keep seoTitle, metaDescription, keywords, sources and claimsToVerify (add to claimsToVerify only if you add a claim a human should check).',
+    'Return ONLY valid JSON.',
+    '',
+    JSON.stringify(article)
+  ].join('\n');
+  var text = geminiGenerateWithFallback_({
+    contents: [{ parts: [{ text: prompt }] }],
+    generationConfig: {
+      temperature: 0.6, maxOutputTokens: CFG.GEMINI_MAX_OUTPUT_TOKENS,
+      responseMimeType: 'application/json', responseSchema: ARTICLE_SCHEMA
+    }
+  });
+  return parseModelJson_(text);
+}
+
 function countWords_(html) {
   var plain = String(html).replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim();
   return plain ? plain.split(/\s+/).length : 0;
@@ -697,6 +726,12 @@ function generateArticleForRow_(sheet, row) {
     var topic = String(sheet.getRange(row, COL.TOPIC).getValue()).trim();
     var status = String(sheet.getRange(row, COL.STATUS).getValue()).trim();
     if (!topic) return { ok: false, message: 'Row ' + row + ' has no topic.' };
+    if (new RegExp(CFG.PERSON_TOPIC_REGEX, 'i').test(topic)) {
+      var msg = 'This topic is about a specific real person (biography / "who is ..."). The tool has no verified facts about people, so it would invent them. Not written. Write such pages (e.g. your About page) yourself from real facts, or choose a finance education topic.';
+      sheet.getRange(row, COL.STATUS).setValue(STATUS.ERROR);
+      logEvent_('ERROR', 'generateArticleForRow_', row, msg);
+      return { ok: false, message: 'Row ' + row + ' refused: ' + msg };
+    }
     if (status && status !== STATUS.TOPIC && status !== STATUS.ERROR) {
       return { ok: false, message: 'Row ' + row + ' has status ' + status + '. Only TOPIC or ERROR rows are generated (this prevents overwriting finished work).' };
     }
@@ -738,6 +773,13 @@ function generateArticleForRow_(sheet, row) {
       catch (pe) { throw new Error('Model did not return valid JSON: ' + pe.message); }
 
       var v = validateArticle_(article);
+      var expandTries = 0;
+      while (v.errors.length === 1 && /too short/.test(v.errors[0]) && expandTries < CFG.MAX_EXPAND_ATTEMPTS) {
+        expandTries++;
+        logEvent_('INFO', 'generateArticleForRow_', row, 'Draft too short (' + countWords_(article.articleHtml) + ' words). Expanding, attempt ' + expandTries + '.');
+        article = expandArticle_(article, topic);
+        v = validateArticle_(article);
+      }
       if (v.errors.length) throw new Error('Validation failed: ' + v.errors.join(' | '));
 
       // Phase 4: merge research sources, open every link, drop dead ones.
